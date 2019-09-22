@@ -1,2 +1,3 @@
-# eldersconnect-junior
-EldersConnect app for Juniors
+# EldersConnect Junior
+
+The EldersConnect app for Juniors to help their Seniors
