@@ -13,29 +13,49 @@ class _MyLoginPageState extends State<MyLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Column(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Welcome!',
-              style: TextStyle(
-                fontSize: 20.0,
-              ),
-            ),
-            GoogleSignInButton(
-              onPressed: () {
-                signInWithGoogle().whenComplete(() {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return MyHomePage();
-                      },
-                    ),
-                  );
-                });
-              },
-              darkMode: true,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Welcome to',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  'EldersConnect Junior!',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                FlutterLogo(size: 125.0,),
+                SizedBox(
+                  height: 30.0,
+                ),
+                GoogleSignInButton(
+                  onPressed: () {
+                    signInWithGoogle().whenComplete(() {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MyHomePage();
+                          },
+                        ),
+                      );
+                    });
+                  },
+                ),
+              ],
             ),
           ],
         ),
