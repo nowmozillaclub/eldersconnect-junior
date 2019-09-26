@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/services/login_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
@@ -29,7 +32,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   ),
                 ),
                 Text(
-                  'EldersConnect Junior!',
+                  'EldersConnect Junior',
                   style: TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.w500,
@@ -38,7 +41,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 SizedBox(
                   height: 30.0,
                 ),
-                FlutterLogo(size: 125.0,),
+                FlutterLogo(
+                  size: 125.0,
+                ),
                 SizedBox(
                   height: 30.0,
                 ),
@@ -48,7 +53,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return MyHomePage();
+                            return MyHomePage(); // get FirebaseUser here
+                            // somehow
                           },
                         ),
                       );
