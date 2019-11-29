@@ -1,6 +1,6 @@
-<!-- <p align="center"><img height="100" width="100" src="./branding/icon.png" alt="EldersConnect"/></p> -->
+<p align="center"><img height="120" width="120" src="./branding/icon.png" alt="EldersConnect"/></p>
 
-# The EldersConnect Junior app for iOS and Android
+# EldersConnect Junior
 
 [![Stars](https://img.shields.io/github/stars/nowmozillaclub/eldersconnect-junior.svg)](https://github.com/nowmozillaclub/eldersconnect-junior/stargazers)
 [![Forks](https://img.shields.io/github/forks/nowmozillaclub/eldersconnect-junior.svg)](https://github.com/nowmozillaclub/eldersconnect-junior/network/members)
