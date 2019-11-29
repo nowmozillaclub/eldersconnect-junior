@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:ec_junior/pages/home_page.dart';
-import 'package:ec_junior/services/login_helper.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ec_junior/services/login_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 

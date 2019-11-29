@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:ec_junior/pages/login_page.dart';
+import 'package:ec_junior/utils/colors.dart';
+import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,7 +10,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EldersConnect Junior',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: MyColors.primary,
+        accentColor: MyColors.accent,
       ),
       home: MyLoginPage(),
     );
