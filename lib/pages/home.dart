@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:ec_junior/services/auth.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class Home extends StatelessWidget {
+  Future scan() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      print(barcode);
+    } catch(error) {
+      print(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthService _authService = AuthService();
@@ -17,6 +27,10 @@ class Home extends StatelessWidget {
                     onPressed: () async {
                       _authService.signOut();
                     },
+                  ),
+                  FlatButton(
+                    child: Text('Scan QR Code'),
+                    onPressed: scan,
                   )
                 ],
               )
