@@ -2,42 +2,38 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseDatabase {
+  // Firebase Auth and Firestore instances,
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final Firestore _firestore = Firestore.instance;
 
-  final String uid;
+  // Required data to add in the document.
+  final String uuid;
   final String emailId;
 
-  FirebaseDatabase({this.uid, this.emailId});
+  //Constructor for getting the UUID.
+  FirebaseDatabase({this.uuid, this.emailId});
 
-  Future<void> initialSaveToDatabase() async {
+  // Method for adding seniors to seniors collection.
+  Future<void> initialSaveUserToCollection() async {
+    // Handling Exceptions if any.
     try {
-      final CollectionReference juniorCollectionReference =
-          _firestore.collection('juniors');
-      DocumentSnapshot juniorDocument =
-          await juniorCollectionReference.document(this.uid).get();
-      Map<String, dynamic> juniorMap = juniorDocument.data;
+      // Getting the document from Firestore.
+      final CollectionReference seniorCollectionReference =
+          _firestore.collection('seniors');
+      DocumentSnapshot seniorDocument =
+          await seniorCollectionReference.document(this.uuid).get();
+      Map<String, dynamic> seniorMap = seniorDocument.data;
 
-      if (juniorMap == null) {
-        await juniorCollectionReference.document(this.uid).setData(
-            {"uid": this.uid, "emailId": this.emailId, "connectedTo": ""});
+      // Checking if data is already present. If not, create a document.
+      if (seniorMap == null) {
+        await seniorCollectionReference.document(this.uuid).setData({
+          'uuid': this.uuid,
+          'emailId': this.emailId,
+          'connectedTo': 'null' // TODO: implement this
+        });
       }
     } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> connectToSeniorApp(String seniorUid) async {
-    try {
-      await _firestore.collection('seniors').document(seniorUid).updateData({
-        "connectedTo": this.uid,
-      });
-
-      await _firestore.collection('juniors').document(this.uid).updateData({
-        "connectedTo": seniorUid,
-      });
-    } catch (error) {
-      print(error);
+      print('Error: $error');
     }
   }
 }
