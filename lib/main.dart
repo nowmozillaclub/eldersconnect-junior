@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: MyColors.primary,
           accentColor: MyColors.accent,
-          fontFamily: 'LexendDeca',
+          fontFamily: 'LexendDeca',brightness: Brightness.dark,
         ),
         home: FirstPage(),
       ),

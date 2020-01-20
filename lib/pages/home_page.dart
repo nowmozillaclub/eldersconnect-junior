@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:ec_junior/models/user.dart';
+import 'package:ec_junior/utils/colors.dart';
+import 'package:ec_junior/utils/ui_helpers.dart';
 import 'package:ec_junior/widgets/senior_details.dart';
 import 'package:ec_junior/widgets/senior_logs.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,7 @@ class MyHomePage extends StatelessWidget {
         '10:00AM': 'Had breakfast',
         '12:00PM': 'Had Lunch'
       },
+
     };
 
     return SafeArea(
@@ -39,6 +42,7 @@ class MyHomePage extends StatelessWidget {
             Text(
               'EldersConnect',
               style: TextStyle(
+                color: isThemeCurrentlyDark(context) ? Colors.white:MyColors.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: 30.0,
               ),
@@ -47,7 +51,9 @@ class MyHomePage extends StatelessWidget {
               height: 10.0,
             ),
             SeniorDetails(
+
               seniorUser: _seniorUser,
+
             ),
             SeniorLogs(
               seniorlogs: seniorLogs,

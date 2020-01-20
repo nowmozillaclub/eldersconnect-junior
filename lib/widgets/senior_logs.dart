@@ -1,3 +1,4 @@
+import 'package:ec_junior/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class SeniorLogs extends StatelessWidget {
@@ -13,7 +14,7 @@ class SeniorLogs extends StatelessWidget {
       children: <Widget>[
         Text(
           '$key',
-          style: TextStyle(fontSize: 16.0),
+          style: TextStyle(fontSize: 16.0, color: Colors.white70),
         ),
         ListView.builder(
           physics: NeverScrollableScrollPhysics(),
@@ -27,8 +28,8 @@ class SeniorLogs extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
               child: Row(
                 children: <Widget>[
-                  Text('$timeKey'),
-                  Text(':'),
+                  Text('$timeKey', style: TextStyle(color: Colors.white70)),
+                  Text(':', style: TextStyle(color: Colors.white70)),
                   Text('$log'),
                 ],
               ),
@@ -43,6 +44,7 @@ class SeniorLogs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
+        color: MyColors.primary,
         padding: EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +56,7 @@ class SeniorLogs extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 25.0,
-                    color: Colors.amber),
+                    color: MyColors.white),
               ),
             ),
             ListView.builder(
