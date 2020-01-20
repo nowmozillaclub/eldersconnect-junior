@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
     return StreamProvider.value(
       value: AuthService().firebaseUser,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'EldersConnect Junior',
         theme: ThemeData(
           primaryColor: MyColors.primary,
