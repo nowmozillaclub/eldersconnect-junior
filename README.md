@@ -1,4 +1,4 @@
-<p align="center"><img height="120" width="120" src="./branding/icon.png" alt="EldersConnect"/></p>
+<p align="center"><img height="150" width="150" src="./branding/icon.png" alt="EldersConnect Junior"/></p>
 
 # EldersConnect Junior
 
@@ -7,9 +7,9 @@
 [![Issues](https://img.shields.io/github/issues/nowmozillaclub/eldersconnect-junior.svg)](https://github.com/nowmozillaclub/eldersconnect-junior/issues)
 [![License](https://img.shields.io/github/license/nowmozillaclub/eldersconnect-junior.svg)](https://opensource.org/licenses/GPL-3.0)
 
-EldersConnect is a smartphone app for iOS and Android to connect Senior Citizens to their Junior Caretakers in order to keep track of medicines, health, etc.
+EldersConnect is a Flutter app to help connect Senior Citizens to their Junior Caretakers in order to keep track of medicines, health, etc. and maintain simple communication between them.
 
-This is the Junior Caretaker's app repository. It is developed by members of ACM and N.O.W. Mozilla Club at NMIMS MPSTME.
+This is the Junior's app repository. The companion Senior app repository can be found [here](https://github.com/nowmozillaclub/eldersconnect-senior). Both are developed by members of ACM MPSTME and NOW Mozilla Club.
 
 ## Building
 
@@ -30,7 +30,7 @@ Please read the [CONTRIBUTING.md](CONTRIBUTING.md) file for more details on how 
 
 ## Credits
 
-This project is primarily developed by a bunch of engineering students at NMIMS MPSTME. Take a look at the entire list of [contributors](https://github.com/nowmozillaclub/eldersconnect-junior/graphs/contributors) to see who all have helped with the project via pull requests.
+This project is developed by a bunch of engineering students at NMIMS MPSTME, Mumbai. Take a look at the entire list of [contributors](https://github.com/nowmozillaclub/eldersconnect-junior/graphs/contributors) to see who all have helped with the project.
 
 ## License
 
