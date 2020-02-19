@@ -39,28 +39,10 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapAppStartedToState() async* {
     try {
-      AuthService _authService = AuthService();
-      FirebaseUser _firebaseUser = await _authService.signInWithGoogle();
-      SharedPreferences _prefs;
-
-      final String _uuid = Uuid().v4();
-      final String _name = _firebaseUser.displayName;
-      final String _email = _firebaseUser.email;
-      final String _photoUrl = _firebaseUser.photoUrl;
-
-      if (_firebaseUser != null) {
-        print('Login success: $_name, $_email');
-
-        User _user = User(
-          uuid: _uuid,
-          name: _name,
-          email: _email,
-          photoUrl: _photoUrl,
-        );
-
-        _prefs.setBool('isFirstLaunch', false);
-        _prefs.setString('user', json.encode(_user));
-
+      final isSignedIn = await _userRepository.isSignedIn();
+      if (isSignedIn) {
+        SharedPreferences prefs;
+        final User _user = User.fromJson(json.decode(prefs.getString('user')));
         yield Authenticated(_user);
       } else {
         print('Not logged in');

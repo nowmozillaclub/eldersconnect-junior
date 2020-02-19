@@ -36,7 +36,7 @@ class App extends StatelessWidget {
           if (state is Unauthenticated)
             return MyLoginPage();
           else if (state is Authenticated) return MyHomePage();
-          return Container();
+          return MyLoginPage();
         },
       ),
     );
