@@ -1,4 +1,3 @@
-import 'package:ec_junior/blocs/auth_bloc/auth_state.dart';
 import 'package:ec_junior/blocs/login_bloc/login_event.dart';
 import 'package:ec_junior/blocs/login_bloc/login_state.dart';
 import 'package:ec_junior/services/user_repository.dart';
@@ -6,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final AuthState authState;
+  final AuthenticationBloc authenticationBloc;
   final UserRepository userRepository;
-  LoginBloc({@required this.authState, @required this.userRepository})
-      : assert(authState != null),
+  LoginBloc({@required this.authenticationBloc, @required this.userRepository})
+      : assert(authenticationBloc != null),
         assert(userRepository != null);
 
   @override
