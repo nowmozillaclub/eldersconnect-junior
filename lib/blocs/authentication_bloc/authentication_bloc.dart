@@ -13,13 +13,10 @@ import 'package:uuid/uuid.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository _userRepository;
-  final SharedPreferences _prefs;
 
-  AuthenticationBloc({UserRepository userRepository, SharedPreferences prefs})
+  AuthenticationBloc({UserRepository userRepository})
       : assert(userRepository != null),
-        assert(prefs != null),
-        _userRepository = userRepository,
-        _prefs = prefs;
+        _userRepository = userRepository;
 
   @override
   AuthenticationState get initialState => Uninitialized();

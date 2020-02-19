@@ -1,25 +1,38 @@
-import 'package:ec_junior/services/auth_service.dart';
-import 'package:ec_junior/utils/colors.dart';
-import 'package:ec_junior/utils/first_page.dart';
+import 'package:ec_junior/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:ec_junior/blocs/authentication_bloc/authentication_event.dart';
+import 'package:ec_junior/blocs/authentication_bloc/authentication_state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() => runApp(MyApp());
+import 'models/user_repository.dart';
 
-class MyApp extends StatelessWidget {
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      create: (context) =>
+          AuthenticationBloc(userRepository: userRepository)..add(AppStarted()),
+      child: App(userRepository: userRepository),
+    ),
+  );
+}
+
+class App extends StatelessWidget {
+  final UserRepository _userRepository;
+
+  App({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return StreamProvider.value(
-      value: AuthService().firebaseUser,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'EldersConnect Junior',
-        theme: ThemeData(
-          primaryColor: MyColors.primary,
-          accentColor: MyColors.accent,
-          fontFamily: 'LexendDeca',brightness: Brightness.dark,
-        ),
-        home: FirstPage(),
+    return MaterialApp(
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          return Container();
+        },
       ),
     );
   }
