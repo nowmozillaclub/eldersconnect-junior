@@ -6,6 +6,8 @@ abstract class AuthenticationState extends Equatable {
   List<Object> get props => throw UnimplementedError();
 }
 
+class Loading extends AuthenticationState {}
+
 class Uninitialized extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {
@@ -14,11 +16,6 @@ class Authenticated extends AuthenticationState {
 
   @override
   List<Object> get props => [_user];
-
-  @override
-  String toString() => 'Authenticated $_user';
 }
 
 class Unauthenticated extends AuthenticationState {}
-
-class Loading extends AuthenticationState {}

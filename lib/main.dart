@@ -10,24 +10,16 @@ import 'models/user_repository.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final UserRepository userRepository = UserRepository();
+  UserRepository _userRepository;
   runApp(
     BlocProvider(
-      create: (context) =>
-          AuthenticationBloc(userRepository: userRepository)..add(AppStarted()),
-      child: App(userRepository: userRepository),
+      create: (context) => AuthenticationBloc()..add(AppStarted()),
+      child: App(),
     ),
   );
 }
 
 class App extends StatelessWidget {
-  final UserRepository _userRepository;
-
-  App({Key key, @required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository,
-        super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,8 +27,10 @@ class App extends StatelessWidget {
         builder: (context, state) {
           if (state is Unauthenticated)
             return MyLoginPage();
-          else if (state is Authenticated) return MyHomePage();
-          return MyLoginPage();
+          else if (state is Authenticated)
+            return MyHomePage();
+          else
+            return MyLoginPage();
         },
       ),
     );

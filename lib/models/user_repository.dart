@@ -18,8 +18,7 @@ class UserRepository {
 
   Future<User> signInWithGoogle() async {
     try {
-      AuthService _authService = AuthService();
-      FirebaseUser _firebaseUser = await _authService.signInWithGoogle();
+      FirebaseUser _firebaseUser = await AuthService().signInWithGoogle();
 
       if (_firebaseUser != null) {
         User user = User(
@@ -29,8 +28,7 @@ class UserRepository {
           photoUrl: _firebaseUser.photoUrl,
         );
 
-        _prefs.setString('user', json.encode(user));
-
+        saveUser(user);
         return user;
       } else {
         return null;
@@ -41,13 +39,27 @@ class UserRepository {
     }
   }
 
-  Future<bool> isSignedIn() async {
-    final String _user = _prefs.getString('user');
-    return _user != null;
+  void saveUser(User _user) {
+    _prefs.setString('user', json.encode(_user));
+    print('${_user.name} saved');
+  }
+
+  User getUser() {
+    try {
+      return User.fromJson(json.decode(_prefs.getString('user')));
+    } catch (error) {
+      print(error);
+      return null;
+    }
   }
 
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
-    await _googleSignIn.signOut();
+    try {
+      await _firebaseAuth.signOut();
+      await _googleSignIn.signOut();
+      _prefs.remove('user');
+    } catch (error) {
+      print(error);
+    }
   }
 }
