@@ -8,6 +8,7 @@ import 'package:ec_junior/utils/text_styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -55,36 +56,9 @@ class MyLoginPage extends StatelessWidget {
                 ),
                 GoogleSignInButton(
                   onPressed: () async {
-                    FirebaseUser _firebaseUser =
-                        await _authService.signInWithGoogle();
-
-                    final String uuid = Uuid().v4();
-                    final String name = _firebaseUser.displayName;
-                    final String email = _firebaseUser.email;
-                    final String photoUrl = _firebaseUser.photoUrl;
-
-                    if (_firebaseUser != null) {
-                      print('Login success! $name, $email');
-
-                      User user = User(
-                        uuid: uuid,
-                        name: name,
-                        email: email,
-                        photoUrl: photoUrl,
-                      );
-
-                      prefs.setBool('isFirstLaunch', false);
-                      prefs.setString('user', json.encode(user));
-
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyHomePage(prefs: this.prefs)),
-                          (Route<dynamic> route) => false);
-                    } else {
-                      print('Not logged in');
-                    }
+                    BlocProvider.of<LoginBloc>(context).add(
+                      LoginButtonPressed(),
+                    );
                   },
                 ),
               ],
