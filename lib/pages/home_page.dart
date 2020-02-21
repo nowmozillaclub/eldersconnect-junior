@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ec_junior/models/user.dart';
 import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/utils/colors.dart';

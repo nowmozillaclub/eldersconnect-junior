@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:ec_junior/blocs/authentication_bloc/authentication_event.dart';
 import 'package:ec_junior/blocs/authentication_bloc/authentication_state.dart';
 import 'package:ec_junior/models/user.dart';
 import 'package:ec_junior/models/user_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -17,16 +14,12 @@ class AuthenticationBloc
   @override
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
-    Stream<AuthenticationState> mapEventToState(
-      AuthenticationEvent event,
-    ) async* {
-      if (event is AppStarted) {
-        yield* _mapAppStartedToState();
-      } else if (event is LoggedIn) {
-        yield* _mapLoggedInToState();
-      } else if (event is LoggedOut) {
-        yield* _mapLoggedOutToState();
-      }
+    if (event is AppStarted) {
+      yield* _mapAppStartedToState();
+    } else if (event is LoggedIn) {
+      yield* _mapLoggedInToState();
+    } else if (event is LoggedOut) {
+      yield* _mapLoggedOutToState();
     }
   }
 
@@ -45,6 +38,7 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
+    // TODO: improve
     final User _user = _userRepository.getUser();
     if (_user != null) {
       yield Authenticated(_user);
