@@ -16,9 +16,9 @@ class AuthenticationBloc
       AuthenticationEvent event) async* {
     if (event is AppStarted) {
       yield* _mapAppStartedToState();
-    } else if (event is LoggedIn) {
+    } else if (event is LogIn) {
       yield* _mapLoggedInToState();
-    } else if (event is LoggedOut) {
+    } else if (event is LogOut) {
       yield* _mapLoggedOutToState();
     }
   }

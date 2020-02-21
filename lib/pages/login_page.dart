@@ -1,4 +1,5 @@
-import 'package:ec_junior/blocs/login_bloc/bloc.dart';
+import 'package:ec_junior/blocs/login_bloc/login_bloc.dart';
+import 'package:ec_junior/blocs/login_bloc/login_event.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/text_styles.dart';
 import 'package:flutter/material.dart';

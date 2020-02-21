@@ -12,12 +12,12 @@ void main() {
   runApp(
     BlocProvider(
       create: (context) => AuthenticationBloc()..add(AppStarted()),
-      child: App(),
+      child: MyApp(),
     ),
   );
 }
 
-class App extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
