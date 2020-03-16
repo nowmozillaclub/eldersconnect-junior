@@ -16,8 +16,10 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User _user = User.fromJson(json.decode(prefs.getString('user')));
-    final User _seniorUser = User(uuid: 'something',
-                                  name: 'Senior Varun Khatri');
+    final User _seniorUser = User(
+      uid: 'something',
+      name: 'Senior Varun Khatri',
+    );
     final Map<String, Map<String, String>> seniorLogs = {
       'Today': {
         '8:00AM': 'Took Medicines',
@@ -31,36 +33,34 @@ class MyHomePage extends StatelessWidget {
         '10:00AM': 'Had breakfast',
         '12:00PM': 'Had Lunch'
       },
-
     };
 
     return SafeArea(
       child: Scaffold(
-        body: ListView(
-          padding: EdgeInsets.all(20.0),
-          children: <Widget>[
-            Text(
-              'EldersConnect',
-              style: TextStyle(
-                color: isThemeCurrentlyDark(context) ? Colors.white:MyColors.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 30.0,
-              ),
+          body: ListView(
+        padding: EdgeInsets.all(20.0),
+        children: <Widget>[
+          Text(
+            'EldersConnect',
+            style: TextStyle(
+              color: isThemeCurrentlyDark(context)
+                  ? Colors.white
+                  : MyColors.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: 30.0,
             ),
-            SizedBox(
-              height: 10.0,
-            ),
-            SeniorDetails(
-
-              seniorUser: _seniorUser,
-
-            ),
-            SeniorLogs(
-              seniorlogs: seniorLogs,
-            ),
-          ],
-        )
-      ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          SeniorDetails(
+            seniorUser: _seniorUser,
+          ),
+          SeniorLogs(
+            seniorlogs: seniorLogs,
+          ),
+        ],
+      )),
     );
   }
 }
