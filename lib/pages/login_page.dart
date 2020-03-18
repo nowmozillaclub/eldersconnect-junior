@@ -8,20 +8,17 @@ import 'package:ec_junior/utils/text_styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class MyLoginPage extends StatelessWidget {
-  final SharedPreferences prefs;
-  AuthService _authService = AuthService();
-
-  MyLoginPage({Key key, @required this.prefs}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final _prefs = Provider.of<SharedPreferences>(context);
+    final _authService = Provider.of<AuthService>(context);
+
     return Scaffold(
-      key: _scaffoldKey,
       body: Container(
         color: MyColors.white,
         child: Row(
@@ -74,22 +71,16 @@ class MyLoginPage extends StatelessWidget {
                         photoUrl: _photoUrl,
                       );
 
-                      prefs.setBool('isFirstLaunch', false);
-                      prefs.setString('user', json.encode(_user));
+                      _prefs.setBool('isFirstLaunch', false);
+                      _prefs.setString('user', json.encode(_user));
 
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  MyQRLinkPage(prefs: this.prefs)),
+                              builder: (context) => MyQRLinkPage()),
                           (Route<dynamic> route) => false);
                     } else {
                       print('Error logging in');
-                      _scaffoldKey.currentState.showSnackBar(
-                        SnackBar(
-                          content: Text('Error logging in'),
-                        ),
-                      );
                     }
                   },
                 ),

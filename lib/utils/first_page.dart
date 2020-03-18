@@ -1,8 +1,8 @@
-import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/pages/login_page.dart';
 import 'package:ec_junior/pages/qr_link.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirstPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> {
   void firstPageChecker() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = Provider.of<SharedPreferences>(context);
     bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
 
     Future.delayed(Duration(seconds: 1), () {
@@ -20,13 +20,13 @@ class _FirstPageState extends State<FirstPage> {
       if (isFirstLaunch) {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MyLoginPage(prefs: prefs)),
+            MaterialPageRoute(builder: (context) => MyLoginPage()),
             (Route<dynamic> route) => false);
         // very first launch since install
       } else {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MyQRLinkPage(prefs: prefs)),
+            MaterialPageRoute(builder: (context) => MyQRLinkPage()),
             (Route<dynamic> route) => false);
       }
     });

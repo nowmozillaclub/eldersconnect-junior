@@ -6,17 +6,15 @@ import 'package:ec_junior/utils/ui_helpers.dart';
 import 'package:ec_junior/widgets/senior_details.dart';
 import 'package:ec_junior/widgets/senior_logs.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatelessWidget {
-  final SharedPreferences prefs;
-
-  MyHomePage({Key key, @required this.prefs}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final User _user = User.fromJson(json.decode(prefs.getString('user')));
-    final User _seniorUser = User(
+    final _prefs = Provider.of<SharedPreferences>(context);
+    final _user = User.fromJson(json.decode(_prefs.getString('user')));
+    final _seniorUser = User(
       uid: 'something',
       name: 'Senior Varun Khatri',
     );

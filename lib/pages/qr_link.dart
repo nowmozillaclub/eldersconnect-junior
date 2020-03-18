@@ -8,17 +8,15 @@ import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyQRLinkPage extends StatelessWidget {
-  final SharedPreferences prefs;
-
-  MyQRLinkPage({Key key, @required this.prefs}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final User _user = User.fromJson(json.decode(prefs.getString('user')));
-    final Firestore _instance = Firestore.instance;
+    final _prefs = Provider.of<SharedPreferences>(context);
+    final _instance = Provider.of<Firestore>(context);
+    final _user = User.fromJson(json.decode(_prefs.getString('user')));
 
     Future<void> _writeToDb(String _seniorUid) async {
       await _instance.collection('users').document('${_user.uid}').setData({
@@ -35,11 +33,11 @@ class MyQRLinkPage extends StatelessWidget {
       String qrCode;
       try {
         qrCode = await BarcodeScanner.scan();
-      } on PlatformException catch (_error) {
-        if (_error.code == BarcodeScanner.CameraAccessDenied) {
+      } on PlatformException catch (error) {
+        if (error.code == BarcodeScanner.CameraAccessDenied) {
           print('Camera permission denied');
         } else {
-          print('Error: $_error');
+          print('Error: $error');
         }
       }
       return qrCode;
@@ -76,9 +74,7 @@ class MyQRLinkPage extends StatelessWidget {
                     await _writeToDb(seniorUid);
                     Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                MyHomePage(prefs: this.prefs)),
+                        MaterialPageRoute(builder: (context) => MyHomePage()),
                         (Route<dynamic> route) => false);
                   }
                 },
