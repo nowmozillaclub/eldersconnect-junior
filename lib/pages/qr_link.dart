@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ec_junior/models/user.dart';
+import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/text_styles.dart';
@@ -17,19 +15,8 @@ class MyQRLinkPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User _user = User.fromJson(json.decode(prefs.getString('user')));
-    final Firestore _instance = Firestore.instance;
-
-    Future<void> _writeToDb(String _seniorUid) async {
-      await _instance.collection('users').document('${_user.uid}').setData({
-        'uid': _user.uid,
-        'name': _user.name,
-        'email': _user.email,
-        'photoUrl': _user.photoUrl,
-        'connectedToUid': _seniorUid,
-        'connectedToName': _seniorUid,
-      });
-    }
+    final _userRepository = UserRepository(prefs);
+    final User _user = _userRepository.getUser();
 
     Future<String> _scanQrCode() async {
       String qrCode;
@@ -73,7 +60,7 @@ class MyQRLinkPage extends StatelessWidget {
                 onPressed: () async {
                   String seniorUid = await _scanQrCode();
                   if (seniorUid != null) {
-                    await _writeToDb(seniorUid);
+                    await _userRepository.updateUser(seniorUid, null);
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(

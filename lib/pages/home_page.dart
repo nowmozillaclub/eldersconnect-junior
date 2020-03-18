@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:ec_junior/models/user.dart';
+import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/ui_helpers.dart';
 import 'package:ec_junior/widgets/senior_details.dart';
@@ -15,11 +14,9 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User _user = User.fromJson(json.decode(prefs.getString('user')));
-    final User _seniorUser = User(
-      uid: 'something',
-      name: 'Senior Varun Khatri',
-    );
+    final UserRepository _userRepository = UserRepository(prefs);
+    final User _user = _userRepository.getUser();
+
     final Map<String, Map<String, String>> seniorLogs = {
       'Today': {
         '8:00AM': 'Took Medicines',
@@ -54,7 +51,7 @@ class MyHomePage extends StatelessWidget {
             height: 10.0,
           ),
           SeniorDetails(
-            seniorUser: _seniorUser,
+            seniorUser: _user,
           ),
           SeniorLogs(
             seniorlogs: seniorLogs,

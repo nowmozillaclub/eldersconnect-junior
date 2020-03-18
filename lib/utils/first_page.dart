@@ -1,4 +1,4 @@
-import 'package:ec_junior/pages/home_page.dart';
+import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/pages/login_page.dart';
 import 'package:ec_junior/pages/qr_link.dart';
 import 'package:ec_junior/utils/colors.dart';
@@ -13,11 +13,12 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   void firstPageChecker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+    final _userRepository = UserRepository(prefs);
+    final _user = _userRepository.getUser();
 
     Future.delayed(Duration(seconds: 1), () {
       // splash screen kinda thing
-      if (isFirstLaunch) {
+      if (_user == null) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => MyLoginPage(prefs: prefs)),
