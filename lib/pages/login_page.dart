@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:ec_junior/models/user.dart';
-import 'package:ec_junior/pages/home_page.dart';
+import 'package:ec_junior/pages/qr_link.dart';
 import 'package:ec_junior/services/auth_service.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/text_styles.dart';
@@ -59,7 +59,7 @@ class MyLoginPage extends StatelessWidget {
                     FirebaseUser _firebaseUser =
                         await _authService.signInWithGoogle();
 
-                    final String _uid = _firebaseUser.uid;
+                    final String _uid = _firebaseUser.uid + '-junior';
                     final String _name = _firebaseUser.displayName;
                     final String _email = _firebaseUser.email;
                     final String _photoUrl = _firebaseUser.photoUrl;
@@ -81,7 +81,7 @@ class MyLoginPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  MyHomePage(prefs: this.prefs)),
+                                  MyQRLinkPage(prefs: this.prefs)),
                           (Route<dynamic> route) => false);
                     } else {
                       print('Error logging in');

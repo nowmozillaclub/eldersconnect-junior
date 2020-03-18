@@ -9,6 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  barcode_scan: ^2.0.1
   cloud_firestore: ^0.13.4+2
   cupertino_icons: ^0.1.3
   firebase_auth: ^0.15.5+2

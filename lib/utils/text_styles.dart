@@ -11,18 +11,18 @@ class MyTextStyles {
   static const title = TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.w500,
-    color: MyColors.black,
+    color: MyColors.white,
   );
 
   static const subtitle = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.w500,
-    color: MyColors.black,
+    color: MyColors.white,
   );
 
   static const body = TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.w400,
-    color: MyColors.black,
+    color: MyColors.white,
   );
 }

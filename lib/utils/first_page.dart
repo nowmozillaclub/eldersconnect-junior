@@ -1,5 +1,6 @@
 import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/pages/login_page.dart';
+import 'package:ec_junior/pages/qr_link.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +26,7 @@ class _FirstPageState extends State<FirstPage> {
       } else {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MyHomePage(prefs: prefs)),
+            MaterialPageRoute(builder: (context) => MyQRLinkPage(prefs: prefs)),
             (Route<dynamic> route) => false);
       }
     });
