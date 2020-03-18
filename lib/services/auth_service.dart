@@ -1,4 +1,3 @@
-import 'package:ec_junior/services/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -31,12 +30,6 @@ class AuthService {
           await _firebaseAuth.signInWithCredential(authCredential);
       final FirebaseUser firebaseUser = authResult.user;
 
-      // Creating document of the user in the seniors collection
-      await FirebaseDatabase(
-              uuid: firebaseUser.uid, emailId: firebaseUser.email)
-          .initialSaveUserToCollection();
-
-      // Return the corresponding Firebase user.
       return firebaseUser;
     } catch (error) {
       print('Error: $error');
