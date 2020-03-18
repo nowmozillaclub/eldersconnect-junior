@@ -32,32 +32,34 @@ class MyHomePage extends StatelessWidget {
       },
     };
 
-    return SafeArea(
-      child: Scaffold(
-          body: ListView(
-        padding: EdgeInsets.all(20.0),
-        children: <Widget>[
-          Text(
-            'EldersConnect',
-            style: TextStyle(
-              color: isThemeCurrentlyDark(context)
-                  ? Colors.white
-                  : MyColors.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 30.0,
+    return Scaffold(
+      body: Container(
+        color: MyColors.black,
+        child: ListView(
+          padding: EdgeInsets.all(20.0),
+          children: <Widget>[
+            Text(
+              'EldersConnect',
+              style: TextStyle(
+                color: isThemeCurrentlyDark(context)
+                    ? Colors.white
+                    : MyColors.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          SeniorDetails(
-            seniorUser: _user,
-          ),
-          SeniorLogs(
-            seniorlogs: seniorLogs,
-          ),
-        ],
-      )),
+            SizedBox(
+              height: 10.0,
+            ),
+            SeniorDetails(
+              seniorUser: _user,
+            ),
+            SeniorLogs(
+              seniorlogs: seniorLogs,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

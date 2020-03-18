@@ -41,7 +41,7 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget build(BuildContext context) {
     return Container(
-      color: MyColors.white,
+      color: MyColors.black,
       child: Center(
         child: Hero(
           tag: 'icon',

@@ -33,46 +33,48 @@ class MyQRLinkPage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: MyColors.black,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Welcome, ${_user.name}',
-                style: MyTextStyles.title,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                'Scan the code shown in EldersConnect Senior',
-                style: MyTextStyles.body,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              RaisedButton(
-                child: Text('Scan Code'),
-                color: MyColors.primary,
-                onPressed: () async {
-                  String seniorUid = await _scanQrCode();
-                  if (seniorUid != null) {
-                    await _userRepository.updateUser(seniorUid, null);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                MyHomePage(prefs: this.prefs)),
-                        (Route<dynamic> route) => false);
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
+      body: Container(
+        color: MyColors.black,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Welcome, ${_user.name}',
+                  style: MyTextStyles.title,
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  'Scan the code shown in EldersConnect Senior',
+                  style: MyTextStyles.body,
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                RaisedButton(
+                  child: Text('Scan Code'),
+                  color: MyColors.primary,
+                  onPressed: () async {
+                    String seniorUid = await _scanQrCode();
+                    if (seniorUid != null) {
+                      await _userRepository.updateUser(seniorUid, null);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyHomePage(prefs: this.prefs)),
+                          (Route<dynamic> route) => false);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

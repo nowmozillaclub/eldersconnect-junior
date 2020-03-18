@@ -17,11 +17,9 @@ class MyLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: _scaffoldKey,
       body: Container(
-        color: MyColors.white,
+        color: MyColors.black,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -30,11 +28,11 @@ class MyLoginPage extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'Welcome to',
-                  style: MyTextStyles.subtitle,
+                  style: MyTextStyles.title,
                 ),
                 Text(
                   'EldersConnect Junior',
-                  style: MyTextStyles.title,
+                  style: MyTextStyles.heading,
                 ),
                 SizedBox(
                   height: 30.0,
@@ -42,8 +40,8 @@ class MyLoginPage extends StatelessWidget {
                 Hero(
                   tag: 'icon',
                   child: Container(
-                    height: 125.0,
-                    width: 125.0,
+                    height: 150.0,
+                    width: 150.0,
                     child: Image.asset('assets/icon/icon-legacy.png'),
                   ),
                 ),
@@ -51,6 +49,7 @@ class MyLoginPage extends StatelessWidget {
                   height: 30.0,
                 ),
                 GoogleSignInButton(
+                  darkMode: true,
                   onPressed: () async {
                     final _userRepository = UserRepository(prefs);
                     FirebaseUser firebaseUser =
@@ -70,11 +69,6 @@ class MyLoginPage extends StatelessWidget {
                           (Route<dynamic> route) => false);
                     } else {
                       print('Error logging in');
-                      _scaffoldKey.currentState.showSnackBar(
-                        SnackBar(
-                          content: Text('Error logging in'),
-                        ),
-                      );
                     }
                   },
                 ),

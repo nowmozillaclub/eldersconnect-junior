@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 class MyTextStyles {
   static const heading = TextStyle(
     fontSize: 24.0,
-    fontWeight: FontWeight.w800,
-    color: MyColors.black,
+    fontWeight: FontWeight.w700,
+    color: MyColors.white,
   );
 
   static const title = TextStyle(
     fontSize: 20.0,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     color: MyColors.white,
   );
 
