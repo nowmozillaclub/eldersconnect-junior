@@ -61,6 +61,7 @@ class MyQRLinkPage extends StatelessWidget {
                   onPressed: () async {
                     String seniorUid = await _scanQrCode();
                     if (seniorUid != null) {
+                      prefs.setBool('isConnected', true);
                       await _userRepository.updateUser(seniorUid, null);
                       Navigator.pushAndRemoveUntil(
                           context,
