@@ -1,5 +1,5 @@
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:ec_junior/models/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/utils/colors.dart';
@@ -12,10 +12,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MyQRLinkPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _prefs = Provider.of<SharedPreferences>(context);
-    final _instance = Provider.of<Firestore>(context);
-    final _userRepository = UserRepository(prefs);
-    final User _user = _userRepository.getUser();
+    final prefs = Provider.of<SharedPreferences>(context);
+    final instance = Provider.of<Firestore>(context);
+    final userRepository = Provider.of<UserRepository>(context);
+    final _user = userRepository.getUser();
 
     Future<String> _scanQrCode() async {
       String qrCode;
@@ -61,12 +61,10 @@ class MyQRLinkPage extends StatelessWidget {
                     String seniorUid = await _scanQrCode();
                     if (seniorUid != null) {
                       prefs.setBool('isConnected', true);
-                      await _userRepository.updateUser(seniorUid, null);
+                      await userRepository.updateUser(seniorUid, null);
                       Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyHomePage(prefs: this.prefs)),
+                          MaterialPageRoute(builder: (context) => MyHomePage()),
                           (Route<dynamic> route) => false);
                     }
                   },

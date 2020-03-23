@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MyLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _prefs = Provider.of<SharedPreferences>(context);
+    final prefs = Provider.of<SharedPreferences>(context);
     final _authService = Provider.of<AuthService>(context);
 
     return Scaffold(
@@ -50,7 +50,7 @@ class MyLoginPage extends StatelessWidget {
                 GoogleSignInButton(
                   darkMode: true,
                   onPressed: () async {
-                    final _userRepository = UserRepository(prefs);
+                    final _userRepository = UserRepository();
                     FirebaseUser firebaseUser =
                         await _authService.signInWithGoogle();
 

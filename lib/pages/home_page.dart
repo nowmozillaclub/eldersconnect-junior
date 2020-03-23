@@ -1,4 +1,3 @@
-import 'package:ec_junior/models/user.dart';
 import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/ui_helpers.dart';
@@ -6,13 +5,12 @@ import 'package:ec_junior/widgets/senior_details.dart';
 import 'package:ec_junior/widgets/senior_logs.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final UserRepository _userRepository = UserRepository(prefs);
-    final User _user = _userRepository.getUser();
+    final userRepository = Provider.of<UserRepository>(context);
+    final _user = userRepository.getUser();
 
     final Map<String, Map<String, String>> seniorLogs = {
       'Today': {

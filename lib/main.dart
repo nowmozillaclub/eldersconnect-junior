@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ec_junior/models/user.dart';
+import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/services/auth_service.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/first_page.dart';
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<User>(create: (_) => User()),
+        Provider<UserRepository>(create: (_) => UserRepository()),
         Provider<AuthService>(create: (_) => AuthService()),
         Provider<Firestore>(create: (_) => Firestore.instance),
         FutureProvider<SharedPreferences>(

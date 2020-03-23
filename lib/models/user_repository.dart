@@ -4,12 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ec_junior/models/user.dart';
 import 'package:ec_junior/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
-  final SharedPreferences prefs;
-  UserRepository(this.prefs);
-
   Future<User> updateUser(
     String _connectedToUid,
     String _connectedToName,
@@ -45,13 +44,13 @@ class UserRepository {
   }
 
   void saveUser(User user) {
-    prefs.setString('user', json.encode(user));
+//    prefs.setString('user', json.encode(user));
     print('${user.name} saved');
   }
 
   User getUser() {
     try {
-      return User.fromJson(json.decode(prefs.getString('user')));
+//      return User.fromJson(json.decode(prefs.getString('user')));
     } catch (error) {
       print(error);
       return null;

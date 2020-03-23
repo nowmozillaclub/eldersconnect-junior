@@ -15,7 +15,8 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   void firstPageChecker() async {
     final prefs = Provider.of<SharedPreferences>(context);
-    final _user = UserRepository(prefs).getUser();
+    final userRepository = Provider.of<UserRepository>(context);
+    final _user = userRepository.getUser();
     bool _isConnected = prefs.getBool('isConnected' ?? false);
 
     Future.delayed(Duration(seconds: 1), () {
@@ -35,7 +36,7 @@ class _FirstPageState extends State<FirstPage> {
       } else {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MyHomePage(prefs: prefs)),
+            MaterialPageRoute(builder: (context) => MyHomePage()),
             (Route<dynamic> route) => false);
       } // when setup is complete
     });
