@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:ec_junior/models/user.dart';
+import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/pages/qr_link.dart';
 import 'package:ec_junior/services/auth_service.dart';
 import 'package:ec_junior/utils/colors.dart';
@@ -20,22 +18,20 @@ class MyLoginPage extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        color: MyColors.white,
+        color: MyColors.black,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
                   'Welcome to',
-                  style: MyTextStyles.subtitle,
+                  style: MyTextStyles.title,
                 ),
                 Text(
                   'EldersConnect Junior',
-                  style: MyTextStyles.title,
+                  style: MyTextStyles.heading,
                 ),
                 SizedBox(
                   height: 30.0,
@@ -43,8 +39,8 @@ class MyLoginPage extends StatelessWidget {
                 Hero(
                   tag: 'icon',
                   child: Container(
-                    height: 125.0,
-                    width: 125.0,
+                    height: 150.0,
+                    width: 150.0,
                     child: Image.asset('assets/icon/icon-legacy.png'),
                   ),
                 ),
@@ -52,27 +48,17 @@ class MyLoginPage extends StatelessWidget {
                   height: 30.0,
                 ),
                 GoogleSignInButton(
+                  darkMode: true,
                   onPressed: () async {
-                    FirebaseUser _firebaseUser =
+                    final _userRepository = UserRepository(prefs);
+                    FirebaseUser firebaseUser =
                         await _authService.signInWithGoogle();
 
-                    final String _uid = _firebaseUser.uid + '-junior';
-                    final String _name = _firebaseUser.displayName;
-                    final String _email = _firebaseUser.email;
-                    final String _photoUrl = _firebaseUser.photoUrl;
+                    if (firebaseUser != null) {
+                      print('Login success! ${firebaseUser.displayName}');
+                      prefs.setBool('isFirstLaunch', false);
 
-                    if (_firebaseUser != null) {
-                      print('Login success! $_name, $_email');
-
-                      User _user = User(
-                        uid: _uid,
-                        name: _name,
-                        email: _email,
-                        photoUrl: _photoUrl,
-                      );
-
-                      _prefs.setBool('isFirstLaunch', false);
-                      _prefs.setString('user', json.encode(_user));
+                      await _userRepository.updateUser(null, null);
 
                       Navigator.pushAndRemoveUntil(
                           context,

@@ -1,3 +1,5 @@
+import 'package:ec_junior/models/user_repository.dart';
+import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/pages/login_page.dart';
 import 'package:ec_junior/pages/qr_link.dart';
 import 'package:ec_junior/utils/colors.dart';
@@ -13,22 +15,29 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   void firstPageChecker() async {
     final prefs = Provider.of<SharedPreferences>(context);
-    bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+    final _user = UserRepository(prefs).getUser();
+    bool _isConnected = prefs.getBool('isConnected' ?? false);
 
     Future.delayed(Duration(seconds: 1), () {
       // splash screen kinda thing
-      if (isFirstLaunch) {
+      if (_user == null) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => MyLoginPage()),
             (Route<dynamic> route) => false);
-        // very first launch since install
-      } else {
+        // user hasn't signed in yet
+      } else if (_isConnected == false) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => MyQRLinkPage()),
             (Route<dynamic> route) => false);
-      }
+        // user hasn't scanned the QR yet
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MyHomePage(prefs: prefs)),
+            (Route<dynamic> route) => false);
+      } // when setup is complete
     });
   }
 
@@ -40,7 +49,7 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget build(BuildContext context) {
     return Container(
-      color: MyColors.white,
+      color: MyColors.black,
       child: Center(
         child: Hero(
           tag: 'icon',

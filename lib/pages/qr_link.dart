@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ec_junior/models/user.dart';
+import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/text_styles.dart';
@@ -16,18 +14,8 @@ class MyQRLinkPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _prefs = Provider.of<SharedPreferences>(context);
     final _instance = Provider.of<Firestore>(context);
-    final _user = User.fromJson(json.decode(_prefs.getString('user')));
-
-    Future<void> _writeToDb(String _seniorUid) async {
-      await _instance.collection('users').document('${_user.uid}').setData({
-        'uid': _user.uid,
-        'name': _user.name,
-        'email': _user.email,
-        'photoUrl': _user.photoUrl,
-        'connectedToUid': _seniorUid,
-        'connectedToName': _seniorUid,
-      });
-    }
+    final _userRepository = UserRepository(prefs);
+    final User _user = _userRepository.getUser();
 
     Future<String> _scanQrCode() async {
       String qrCode;
@@ -44,44 +32,49 @@ class MyQRLinkPage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: MyColors.black,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Welcome, ${_user.name}',
-                style: MyTextStyles.title,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                'Scan the code shown in EldersConnect Senior',
-                style: MyTextStyles.body,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              RaisedButton(
-                child: Text('Scan Code'),
-                color: MyColors.primary,
-                onPressed: () async {
-                  String seniorUid = await _scanQrCode();
-                  if (seniorUid != null) {
-                    await _writeToDb(seniorUid);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyHomePage()),
-                        (Route<dynamic> route) => false);
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
+      body: Container(
+        color: MyColors.black,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Welcome, ${_user.name}',
+                  style: MyTextStyles.title,
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  'Scan the code shown in EldersConnect Senior',
+                  style: MyTextStyles.body,
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                RaisedButton(
+                  child: Text('Scan Code'),
+                  color: MyColors.primary,
+                  onPressed: () async {
+                    String seniorUid = await _scanQrCode();
+                    if (seniorUid != null) {
+                      prefs.setBool('isConnected', true);
+                      await _userRepository.updateUser(seniorUid, null);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyHomePage(prefs: this.prefs)),
+                          (Route<dynamic> route) => false);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
