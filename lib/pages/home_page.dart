@@ -1,5 +1,4 @@
 import 'package:ec_junior/utils/colors.dart';
-import 'package:ec_junior/utils/ui_helpers.dart';
 import 'package:ec_junior/widgets/senior_details.dart';
 import 'package:ec_junior/widgets/senior_logs.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +30,7 @@ class MyHomePage extends StatelessWidget {
             Text(
               'EldersConnect',
               style: TextStyle(
-                color: isThemeCurrentlyDark(context)
-                    ? Colors.white
-                    : MyColors.primary,
+                color: MyColors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 30.0,
               ),
