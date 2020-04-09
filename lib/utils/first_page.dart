@@ -14,12 +14,13 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> {
   void firstPageChecker() async {
-    final prefs = Provider.of<SharedPreferences>(context);
-    final userRepository = Provider.of<UserRepository>(context);
-    final _user = userRepository.getUser();
-    bool _isConnected = prefs.getBool('isConnected' ?? false);
+    final _prefs = await SharedPreferences.getInstance();
+    final _userRepo = Provider.of<UserRepository>(context, listen: false);
+    final _user = await _userRepo.getUser();
 
-    Future.delayed(Duration(seconds: 1), () {
+    bool _isConnected = _prefs.getBool('isConnected' ?? false);
+
+    Future.delayed(Duration(seconds: 1, milliseconds: 500), () {
       // splash screen kinda thing
       if (_user == null) {
         Navigator.pushAndRemoveUntil(

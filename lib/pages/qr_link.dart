@@ -1,5 +1,4 @@
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/utils/colors.dart';
@@ -12,11 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MyQRLinkPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final prefs = Provider.of<SharedPreferences>(context);
-    final instance = Provider.of<Firestore>(context);
-    final userRepository = Provider.of<UserRepository>(context);
-    final _user = userRepository.getUser();
-
     Future<String> _scanQrCode() async {
       String qrCode;
       try {
@@ -41,14 +35,14 @@ class MyQRLinkPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Welcome, ${_user.name}',
+                  'Welcome!',
                   style: MyTextStyles.title,
                 ),
                 SizedBox(
                   height: 20.0,
                 ),
                 Text(
-                  'Scan the code shown in EldersConnect Senior',
+                  'Scan the code from EldersConnect Senior',
                   style: MyTextStyles.body,
                 ),
                 SizedBox(
@@ -58,10 +52,14 @@ class MyQRLinkPage extends StatelessWidget {
                   child: Text('Scan Code'),
                   color: MyColors.primary,
                   onPressed: () async {
-                    String seniorUid = await _scanQrCode();
+                    final _prefs = await SharedPreferences.getInstance();
+                    final _userRepo =
+                        Provider.of<UserRepository>(context, listen: false);
+                    final seniorUid = await _scanQrCode();
+
                     if (seniorUid != null) {
-                      prefs.setBool('isConnected', true);
-                      await userRepository.updateUser(seniorUid, null);
+                      _prefs.setBool('isConnected', true);
+                      await _userRepo.updateUser(seniorUid, null);
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => MyHomePage()),

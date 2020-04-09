@@ -1,17 +1,12 @@
-import 'package:ec_junior/models/user_repository.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/ui_helpers.dart';
 import 'package:ec_junior/widgets/senior_details.dart';
 import 'package:ec_junior/widgets/senior_logs.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final userRepository = Provider.of<UserRepository>(context);
-    final _user = userRepository.getUser();
-
     final Map<String, Map<String, String>> seniorLogs = {
       'Today': {
         '8:00AM': 'Took Medicines',
@@ -46,9 +41,7 @@ class MyHomePage extends StatelessWidget {
             SizedBox(
               height: 10.0,
             ),
-            SeniorDetails(
-              seniorUser: _user,
-            ),
+            SeniorDetails(),
             SeniorLogs(
               seniorlogs: seniorLogs,
             ),

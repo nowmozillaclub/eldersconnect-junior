@@ -3,7 +3,6 @@ import 'package:ec_junior/pages/qr_link.dart';
 import 'package:ec_junior/services/auth_service.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/text_styles.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:provider/provider.dart';
@@ -13,9 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MyLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final prefs = Provider.of<SharedPreferences>(context);
-    final _authService = Provider.of<AuthService>(context);
-
     return Scaffold(
       body: Container(
         color: MyColors.black,
@@ -50,15 +46,18 @@ class MyLoginPage extends StatelessWidget {
                 GoogleSignInButton(
                   darkMode: true,
                   onPressed: () async {
-                    final _userRepository = UserRepository();
-                    FirebaseUser firebaseUser =
-                        await _authService.signInWithGoogle();
+                    final _prefs = await SharedPreferences.getInstance();
+                    final _userRepo =
+                        Provider.of<UserRepository>(context, listen: false);
+                    final _authService =
+                        Provider.of<AuthService>(context, listen: false);
+                    final _firebaseUser = await _authService.signInWithGoogle();
 
-                    if (firebaseUser != null) {
-                      print('Login success! ${firebaseUser.displayName}');
-                      prefs.setBool('isFirstLaunch', false);
+                    if (_firebaseUser != null) {
+                      print('Login success! ${_firebaseUser.displayName}');
+                      _prefs.setBool('isFirstLaunch', false);
 
-                      await _userRepository.updateUser(null, null);
+                      await _userRepo.updateUser(null, null);
 
                       Navigator.pushAndRemoveUntil(
                           context,
