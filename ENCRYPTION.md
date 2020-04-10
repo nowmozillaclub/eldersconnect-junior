@@ -21,7 +21,7 @@ Replace the encrypted `AndroidManifest.xml` with the following contents:
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="EldersConnect Junior"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -37,7 +37,9 @@ Replace the encrypted `AndroidManifest.xml` with the following contents:
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name="com.apptreesoftware.barcodescan.BarcodeScannerActivity"/>
     </application>
+    <uses-permission android:name="android.permission.CAMERA" />
 </manifest>
 ```
 
