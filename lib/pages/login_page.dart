@@ -8,7 +8,6 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: must_be_immutable
 class MyLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

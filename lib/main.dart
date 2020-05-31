@@ -1,31 +1,34 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ec_junior/models/user_repository.dart';
-import 'package:ec_junior/services/auth_service.dart';
+import 'package:ec_junior/pages/sign_in.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/utils/first_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ec_junior/providers/providers.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(Root());
 
-class MyApp extends StatelessWidget {
+class Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<UserRepository>(create: (_) => UserRepository()),
-        Provider<AuthService>(create: (_) => AuthService()),
-        Provider<Firestore>(create: (_) => Firestore.instance),
+        ChangeNotifierProvider(
+          create: (context) => AuthenticationProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'EldersConnect Junior',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: MyColors.primary,
           accentColor: MyColors.accent,
           fontFamily: 'LexendDeca',
           brightness: Brightness.dark,
         ),
-        home: FirstPage(),
+        routes: {
+          SignInPage.routeName: (context) => SignInPage(),
+        },
+        home: SignInPage(),
       ),
     );
   }
