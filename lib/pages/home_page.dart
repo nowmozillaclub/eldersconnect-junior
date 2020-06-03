@@ -19,30 +19,30 @@ class MyHomePage extends StatelessWidget {
         '10:00AM': 'Had breakfast',
         '12:00PM': 'Had Lunch'
       },
+      'tomorrow': {
+        '8:00AM': 'Took Medicines',
+        '9:00AM': 'Walked for 35 minutes',
+        '10:00AM': 'Had breakfast',
+        '12:00PM': 'Had Lunch'
+      },
+      'tomorow': {
+        '8:00AM': 'Took Medicines',
+        '9:00AM': 'Walked for 35 minutes',
+        '10:00AM': 'Had breakfast',
+        '12:00PM': 'Had Lunch'
+      },
     };
 
-    return Scaffold(
-      body: Container(
-        color: MyColors.black,
-        child: ListView(
-          padding: EdgeInsets.all(20.0),
-          children: <Widget>[
-            Text(
-              'EldersConnect',
-              style: TextStyle(
-                color: MyColors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 30.0,
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            SeniorDetails(),
-            SeniorLogs(
-              seniorlogs: seniorLogs,
-            ),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xff212121),
+        body: Container(
+          child: ListView(
+            children: <Widget>[
+              SeniorDetails(),
+              SeniorLogs(seniorlogs: seniorLogs),
+            ],
+          ),
         ),
       ),
     );
