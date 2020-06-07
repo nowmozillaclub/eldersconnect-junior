@@ -1,44 +1,58 @@
+import 'package:ec_junior/pages/home_page.dart';
+import 'package:ec_junior/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:ec_junior/providers/providers.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:provider/provider.dart';
-import 'package:ec_junior/models/models.dart';
 
 class SignInPage extends StatelessWidget {
   static final String routeName = "/sign-in";
 
   @override
   Widget build(BuildContext context) {
-    AuthenticationProvider authentication = Provider.of<AuthenticationProvider>(
+    UserProvider authenticationProvider = Provider.of<UserProvider>(
       context,
-      listen: true,
+      listen: false,
     );
 
     return Scaffold(
-      body: Center(
-        child: Column(
+      body: Container(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RaisedButton(
-              child: Text('Log In'),
-              onPressed: () {
-                authentication.signInWithGoogle();
-              },
-            ),
-            RaisedButton(
-              child: Text('Log Out'),
-              onPressed: () {
-                authentication.signOut();
-              },
-            ),
-            FutureBuilder<User>(
-              future: authentication.user,
-              builder: (context, AsyncSnapshot<User> snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data.name);
-                } else {
-                  return Text('Please Log In');
-                }
-              },
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Welcome to',
+                  style: TextStyleConfig.title,
+                ),
+                Text(
+                  'EldersConnect Junior',
+                  style: TextStyleConfig.heading,
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Hero(
+                  tag: 'icon',
+                  child: Container(
+                    height: 150.0,
+                    width: 150.0,
+                    child: Image.asset('assets/icon/icon-legacy.png'),
+                  ),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                GoogleSignInButton(
+                  darkMode: true,
+                  onPressed: () async {
+                    await authenticationProvider.signInWithGoogle();
+                    Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+                  },
+                ),
+              ],
             ),
           ],
         ),

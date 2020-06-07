@@ -1,6 +1,5 @@
-import 'package:ec_junior/pages/sign_in.dart';
-import 'package:ec_junior/utils/colors.dart';
-import 'package:ec_junior/utils/first_page.dart';
+import 'package:ec_junior/pages/pages.dart';
+import 'package:ec_junior/utils/utils.dart' show ColorConfig;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ec_junior/providers/providers.dart';
@@ -13,22 +12,24 @@ class Root extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => AuthenticationProvider(),
+          create: (context) => UserProvider(),
         ),
       ],
       child: MaterialApp(
         title: 'EldersConnect Junior',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: MyColors.primary,
-          accentColor: MyColors.accent,
+          primaryColor: ColorConfig.primary,
+          accentColor: ColorConfig.accent,
           fontFamily: 'LexendDeca',
           brightness: Brightness.dark,
         ),
+        initialRoute: SplashPage.routeName,
         routes: {
           SignInPage.routeName: (context) => SignInPage(),
+          HomePage.routeName: (context) => HomePage(),
         },
-        home: SignInPage(),
+        home: SplashPage(),
       ),
     );
   }

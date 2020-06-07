@@ -3,7 +3,7 @@ description: EldersConnect app for Juniors
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.5.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -37,8 +37,8 @@ flutter:
   uses-material-design: true
 
   assets:
-     - assets/credits/
-     - assets/flare/
+#     - assets/credits/
+#     - assets/flare/
      - assets/icon/
 
   fonts:
