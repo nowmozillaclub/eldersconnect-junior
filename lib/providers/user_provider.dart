@@ -103,19 +103,21 @@ class UserProvider with ChangeNotifier {
         .collection('seniors')
         .document(juniorUser.connectedToUid)
         .get();
-
-    if(seniorDocSnap.exists) {
-      return new User(
-        uid: seniorDocSnap.data["uid"],
-        name: seniorDocSnap.data["name"],
-        connectedToName: seniorDocSnap.data["connectedToName"],
-        connectedToUid: seniorDocSnap.data["connectedToUid"],
-        email: seniorDocSnap.data['email'],
-        phone: seniorDocSnap.data['phone'],
-        photoUrl: seniorDocSnap.data['photoUrl'],
-      );
+    try{
+      if(seniorDocSnap.exists) {
+        return new User(
+          uid: seniorDocSnap.data["uid"],
+          name: seniorDocSnap.data["name"],
+          connectedToName: seniorDocSnap.data["connectedToName"],
+          connectedToUid: seniorDocSnap.data["connectedToUid"],
+          email: seniorDocSnap.data['email'],
+          phone: seniorDocSnap.data['phone'],
+          photoUrl: seniorDocSnap.data['photoUrl'],
+        );
+      }
+    }catch(error){
+      print(error);
     }
-
-    return null;
+    return user;
   }
 }
