@@ -1,200 +1,212 @@
 
 
-import 'package:flutter/material.dart';
-class Ask extends StatefulWidget {
-  @override
-  _AskState createState() => _AskState();
-}
+      import 'package:cloud_firestore/cloud_firestore.dart';
+     // import 'package:url_launcher/url_launcher.dart';
+      import 'package:flutter/material.dart';
+      import 'package:carousel_widget/carousel_widget.dart';
+      import 'package:carousel_slider/carousel_slider.dart';
+      import 'package:firebase_database/firebase_database.dart';
 
-class _AskState extends State<Ask> {
-  @override
-   Widget build(BuildContext context) { {
-    return Scaffold(
-       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {_showDialog();
-          // Add your onPressed code here!
-        },
-        label: Text('Ask'),
-        icon: Icon(Icons.assignment_turned_in),
-        backgroundColor: Colors.pink,
-      
-      ),
+
+
+
+      class MyCarousel extends StatefulWidget {
+
+        @override
+        _MyCarouselState createState() => _MyCarouselState();
+
+      }
+
+      class _MyCarouselState extends State<MyCarousel> {
+      CarouselSlider carouselSlider;
+      final dbref = FirebaseDatabase.instance.reference();
+
+
+      bool done = false;
+
+      bool left = false;
+
+      bool emergency=false;
+
+      int i=0;
      
-      body: ListView(
-        
-        children: <Widget>[
-          // Padding(
-            // padding: const EdgeInsets.all(8.0),
+        @override
+        Widget build(BuildContext context) {
+          int ScreenNo=0;
+          initializeData();
 
-             new Container(
-              
-              decoration: BoxDecoration(
-                color:Colors.purple.shade400,
-                borderRadius: BorderRadius.only(
-                  bottomRight:Radius.circular(42.0)
-                ),
-              ),
-              
-        height: 105,
-        
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(6.8,12.0,0.0,14.0),
-          child:Row(
-            children: <Widget>[
-              Text(
-                
-                  "hello jagrit",
-                  style: TextStyle(
-                      fontFamily: 'fira',
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.yellow.shade500,
-                  ),
-
-              ),
-              
-              new FlatButton(
-              child:  Icon(Icons.close,color: Colors.blue),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-              
-            ],
-          ),
-         
-        ),
-          
-      ),
-     
-      SizedBox(height:40),
-      new Container(
-         child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ListTile(
-              leading: Icon(Icons.check,color: Colors.green),
-              title: Text('Did you check your BP'),
-            ),
-            ButtonBar(
-              children: <Widget>[
-                FlatButton(
-                  child: const Text('again',
-                  style: TextStyle(
-                    color: Colors.red
-                  )),
-                  onPressed: () {/* ... */},
-                ),
-                FlatButton(
-                  child: const Text('change'
-                ),
-                  onPressed: () {/* ... */},
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      ),
-      new Container(
-         child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ListTile(
-              leading: Icon(Icons.close,color: Colors.red),
-              title: Text('How is your Leg pain'),
-            ),
-            ButtonBar(
-              children: <Widget>[
-                FlatButton(
-                  child: const Text('again',
-                  style: TextStyle(
-                    color: Colors.red
-                  )),
-                  onPressed: () {/* ... */},
-                ),
-                FlatButton(
-                  child: const Text('change'
-                ),
-                  onPressed: () {/* ... */},
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      ),
-      new Container(
-         child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ListTile(
-              leading: Icon(Icons.history,color: Colors.green),
-              title: Text('Did you had milk'),
-            ),
-            ButtonBar(
-              children: <Widget>[
-                FlatButton(
-                  child: const Text('again',
-                  style: TextStyle(
-                    color: Colors.red
-                  )),
-                  onPressed: () {/* ... */},
-                ),
-                FlatButton(
-                  child: const Text('change'
-                ),
-                  onPressed: () {/* ... */},
-                ),
-                
-              ],
-              
-            ),
-          ],
-        ),
-      ),
-      ),
-          //)
-          
-            
-          
-        ],
-        
-      
-      )
-      
-    );
-  }
-}
-
-void _showDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-       
-        return AlertDialog(
-          title: new Text("Ask Your Question"),
-          content:  new TextField(
-                        decoration: new InputDecoration(hintText: "How is your knee pain"),
-                        
-
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body:
+                Carousel(
+                  listViews: [
+                    Fragment(
+                      child: getScreen(i),
                     ),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Submit",style:TextStyle(color: Colors.green)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
+                  
+                  ],
+                ),
+                
+          );
+          
+        }
+        void writeData(){
+          dbref.child("responses").set(
+            {
+              "Done": "$done",
+              "Not done":"$left",
+              "name" : "jagrit"
+            }
+          );
+        }
+       
+
+        Widget getScreen(jag) {
+          return new ListView(
+            children: <Widget>[
+              new Container(
+                height: 45.0,
+                margin: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 0.0),
+                child: Text(
+                  titles.elementAt(jag),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 20,color:Colors.red),
+                ),
+              ),
+              new Container(
+                height: 250.0,
+                margin: const EdgeInsets.fromLTRB(20.0, 90.0, 20.0, 0.0),
+                child: Image.asset(
+                  imagenames.elementAt(jag),
+                ),
+              ),
+              
+              
+              new Container(
+                height: 100.0,
+                margin: const EdgeInsets.fromLTRB(50.0, 12.0, 50.0, 0.0),
+                child: Text(
+                  description.elementAt(jag),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 5,
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+              Container(
+                        //transform: Matrix4.translationValues(0.0, fabButtonanim.value * devHeight, 0.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            FloatingActionButton(
+                              elevation: 4.0,
+                              onPressed: goToUndoneNext,
+                              child: Icon(Icons.close, color: Colors.red),
+                              backgroundColor: Colors.white,
+                            ),
+                            FloatingActionButton(
+                              elevation: 4.0,
+                              onPressed: goToDoneNext,
+                              child: Icon(Icons.assignment_turned_in, color: Colors.green),
+                              backgroundColor: Colors.white,
+                            ),
+                              
+                            FloatingActionButton(
+                              elevation: 4.0,
+                              onPressed: emergencypress,
+                              child: Icon(Icons.add_alarm, color: Colors.pink),
+                              backgroundColor: Colors.white,
+                            )
+                          ],
+                        ),
+                    
+                ),
+                
+            ],
+          );
+        }
+
+        goToUndoneNext() {
+          setState(() {
+            i=i+1;
+          });
+        
+          left = true;
+        response(done,left,emergency);  
+      }
+
+      goToDoneNext() {
+       
+          done = true;
+         
+          setState(() {
+            i=i+1;
+          });
+          response(done,left,emergency);
+      }
+
+//       _launchMaps() async {
+//   const url = "https://www.google.com/maps/search/?api=1&query=LATITUDE,LONGITUDE,17&query_place_id=PLACE_ID";
+//   if (await canLaunch(url)) {
+//     await launch(url);
+//   } else {
+//     throw 'Could not launch Maps';
+//   }
+// }
+
+      emergencypress() {
+      
+          emergency = true;
+    
+          response(done,left,emergency);
+      }
+
+        List<String> titles = List();
+
+        List<String> description = List();
+
+        List<String> imagenames = List();
+
+        void initializeData() {
+         StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('hotspot_chat')
+                            .orderBy('timestamp')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                                'Loading messages...';
+
+                          List<DocumentSnapshot> docs = snapshot.data.documents;
+
+
+                             titles.add('${docs[1]}');
+          description.add('hello');
+          imagenames.add("assets/graphics/emergency.png");
+                        }
+         );
+            
+         
+            
+
+          titles.add("Question from Urmil");
+          description.add(
+              "How is your leg pain");
+          imagenames.add("assets/graphics/man.png");
+
+          titles.add("Hello Jagrit");
+          description.add(
+      "what about HeadAche");
+          imagenames.add("assets/graphics/emergency.png");
+        }
+      }
+
+      
+      String hello = "jagrit";
+       // saving the responses onto firebase
+    Future<void> response(bool one,bool two,bool three,) async {
+      await Firestore.instance.collection("res").add({
+        'response': true,        
+      });
+    }
