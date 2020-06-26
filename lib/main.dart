@@ -31,7 +31,7 @@ class Root extends StatelessWidget {
         routes: {
           SignInPage.routeName: (context) => SignInPage(),
         },
-        home: MyCarousel(),
+        home: Ask(),
       ),
     );
   }
