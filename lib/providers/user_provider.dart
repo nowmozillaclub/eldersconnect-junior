@@ -98,7 +98,6 @@ class UserProvider with ChangeNotifier {
 
   Future<User> get seniorDetails async {
     User juniorUser = await this.user;
-
     DocumentSnapshot seniorDocSnap = await this._firestore
         .collection('seniors')
         .document(juniorUser.connectedToUid)

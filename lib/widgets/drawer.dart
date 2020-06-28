@@ -1,3 +1,4 @@
+import 'package:ec_junior/pages/time_picker.dart';
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -32,25 +33,30 @@ class MainDrawer extends StatelessWidget {
               height: 20.0,
             ),
             _buildDrawerMenu(
-              'Option 1',
+              'Set Timetable',
               Icon(
-                Icons.phone_android,
+                Icons.timer,
               ),
-                  () {},
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TimePicker()),
+                );
+              },
             ),
             _buildDrawerMenu(
               'Option 2',
               Icon(
                 Icons.phone_android,
               ),
-                  () {},
+              () {},
             ),
             _buildDrawerMenu(
               'Option 3',
               Icon(
                 Icons.phone_android,
               ),
-                  () {},
+              () {},
             ),
           ],
         ),

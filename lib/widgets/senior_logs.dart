@@ -12,7 +12,6 @@ class SeniorLogsWidget extends StatelessWidget {
       context,
       listen: true,
     );
-
     return FutureBuilder(
       future: userProvider.seniorDetails,
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
