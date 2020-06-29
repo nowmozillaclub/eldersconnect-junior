@@ -21,7 +21,7 @@ class UserProvider with ChangeNotifier {
 
       final DocumentSnapshot timetable= await this._firestore.collection("timetable").document(id).get();
 
-      if (userDocSnap.exists) {
+      if (userDocSnap.exists && timetable.exists) {
         return new User(
           photoUrl: userDocSnap.data["photoUrl"],
           phone: userDocSnap.data["phone"],

@@ -23,14 +23,13 @@ class _TimePickerState extends State<TimePicker> {
   void _saveTimetable() async {
     UserProvider userprovider= UserProvider();
     User user = await userprovider.user;
-    DocumentSnapshot docs= await Firestore.instance.collection('timetable').document('${user.uid}').get();
-    timetables= docs.data['timetable'];
+    timetables= user.timetables??{};
     print(timetables);
     timetables[_pickedTime.format(context).toString()] = task;
     Firestore.instance
         .collection('timetable')
         .document(user.uid)
-        .updateData({
+        .setData({
       'juniorId': user.uid,
       'seniorId': user.connectedToUid,
       'timetable': timetables,
