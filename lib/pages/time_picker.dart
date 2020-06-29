@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TimePicker extends StatefulWidget {
@@ -10,61 +12,51 @@ class _TimePickerState extends State<TimePicker> {
   TimeOfDay _time = TimeOfDay.now();
   TimeOfDay _pickedTime;
   String task = '';
-  final _formKey = GlobalKey<FormState>();
+  final Map<String, String> someMap = {};
 
   Future<Null> selectTime(BuildContext context) async {
     _pickedTime = await showTimePicker(context: context, initialTime: _time);
     setState(() {});
   }
 
-  void saveForm() {
-    final isValid = _formKey.currentState.validate();
-    FocusScope.of(context).unfocus();
-    if (isValid) {
-      _formKey.currentState.save();
-//      Timer(Duration(seconds: 1), () {
-//      });
-      Navigator.of(context).pop();
-    }
+  void _saveTimetable() async {
+    FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    final DocumentSnapshot junior = await Firestore.instance
+        .collection('juniors')
+        .document(currentUser.uid)
+        .get();
+    someMap[_pickedTime.format(context).toString()] = task;
+    Firestore.instance
+        .collection('timetable')
+        .document(currentUser.uid)
+        .updateData({
+      'juniorId': currentUser.uid,
+      'seniorId': junior['connectedToUid'],
+      'timetable': someMap,
+    });
+    print(task);
+    print(someMap);
+    print(_pickedTime.toString());
+    Navigator.of(context).pop();
   }
 
   Widget timetableInput() {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
+        border: Border.all(color: Colors.grey[700], width: 3),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(
         padding: EdgeInsets.all(10.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return "Please enter a task. This cannot be left blank";
-                  }
-                  return null;
-                },
-                key: ValueKey("task"),
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: "Task"),
-                onSaved: (value) {
-                  task = value;
-                },
-              ),
-              TextFormField(
-                key: ValueKey("description"),
-                keyboardType: TextInputType.text,
-                decoration:
-                    InputDecoration(labelText: "Task Description( optional)"),
-                onSaved: (value) {
-                  task = value;
-                },
-              ),
-            ],
-          ),
+        child: TextField(
+          key: ValueKey("task"),
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(labelText: "Task"),
+          onChanged: (value) {
+            setState(() {
+              task = value;
+            });
+          },
         ),
       ),
     );
@@ -78,6 +70,12 @@ class _TimePickerState extends State<TimePicker> {
           padding: EdgeInsets.all(8),
           child: Column(
             children: <Widget>[
+              ClipRRect(
+                child: Image.asset('assets/icon/timerimg.jpeg'),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
               timetableInput(),
               SizedBox(
                 height: 10.0,
@@ -104,7 +102,7 @@ class _TimePickerState extends State<TimePicker> {
                   ),
                   IconButton(
                     icon: Icon(Icons.save),
-                    onPressed: saveForm,
+                    onPressed: _saveTimetable,
                   ),
                 ],
               ),
