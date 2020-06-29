@@ -19,6 +19,8 @@ class UserProvider with ChangeNotifier {
       final DocumentSnapshot userDocSnap =
       await this._firestore.collection("juniors").document(id).get();
 
+      final DocumentSnapshot timetable= await this._firestore.collection("timetable").document(id).get();
+
       if (userDocSnap.exists) {
         return new User(
           photoUrl: userDocSnap.data["photoUrl"],
@@ -28,6 +30,7 @@ class UserProvider with ChangeNotifier {
           connectedToName: userDocSnap.data["connectedToName"],
           name: userDocSnap.data["name"],
           uid: userDocSnap.data["uid"],
+          timetables: timetable.data["timetable"]
         );
       } else {
         return new User(
@@ -38,6 +41,7 @@ class UserProvider with ChangeNotifier {
           connectedToName: null,
           name: firebaseUser.displayName,
           uid: firebaseUser.uid,
+          timetables: null,
         );
       }
     } else {

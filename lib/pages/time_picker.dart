@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../providers/user_provider.dart';
+import '../models/user.dart';
 
 class TimePicker extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _TimePickerState extends State<TimePicker> {
   TimeOfDay _time = TimeOfDay.now();
   TimeOfDay _pickedTime;
   String task = '';
-  final Map<String, String> someMap = {};
+  Map<String, dynamic> timetables = {};
 
   Future<Null> selectTime(BuildContext context) async {
     _pickedTime = await showTimePicker(context: context, initialTime: _time);
@@ -20,23 +21,21 @@ class _TimePickerState extends State<TimePicker> {
   }
 
   void _saveTimetable() async {
-    FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-    final DocumentSnapshot junior = await Firestore.instance
-        .collection('juniors')
-        .document(currentUser.uid)
-        .get();
-    someMap[_pickedTime.format(context).toString()] = task;
+    UserProvider userprovider= UserProvider();
+    User user = await userprovider.user;
+    DocumentSnapshot docs= await Firestore.instance.collection('timetable').document('${user.uid}').get();
+    timetables= docs.data['timetable'];
+    print(timetables);
+    timetables[_pickedTime.format(context).toString()] = task;
     Firestore.instance
         .collection('timetable')
-        .document(currentUser.uid)
+        .document(user.uid)
         .updateData({
-      'juniorId': currentUser.uid,
-      'seniorId': junior['connectedToUid'],
-      'timetable': someMap,
+      'juniorId': user.uid,
+      'seniorId': user.connectedToUid,
+      'timetable': timetables,
     });
-    print(task);
-    print(someMap);
-    print(_pickedTime.toString());
+    print(timetables);
     Navigator.of(context).pop();
   }
 
