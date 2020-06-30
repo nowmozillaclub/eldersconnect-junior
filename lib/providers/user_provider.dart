@@ -9,28 +9,62 @@ class UserProvider with ChangeNotifier {
   final Firestore _firestore = Firestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<User> get user async =>
-      this._convertToUser(await this._firebaseAuth.currentUser());
+  User _mainUser;
+  User _seniorUser;
+
+  User get user => _mainUser;
+
+  User get senior => _seniorUser;
+
+  Future<User> setupUser() async {
+    this._mainUser =
+        await this._convertToUser(await this._firebaseAuth.currentUser());
+
+    if(this._mainUser.connectedToUid != null) {
+      DocumentSnapshot seniorDocSnap = await this
+          ._firestore
+          .collection('seniors')
+          .document(_mainUser.connectedToUid)
+          .get();
+      try {
+        if (seniorDocSnap.exists) {
+          this._seniorUser = new User(
+            uid: seniorDocSnap.data["uid"],
+            name: seniorDocSnap.data["name"],
+            connectedToName: seniorDocSnap.data["connectedToName"],
+            connectedToUid: seniorDocSnap.data["connectedToUid"],
+            email: seniorDocSnap.data['email'],
+            phone: seniorDocSnap.data['phone'],
+            photoUrl: seniorDocSnap.data['photoUrl'],
+          );
+        }
+      } catch (error) {
+        print(error);
+      }
+    } else {
+      this._seniorUser = null;
+    }
+
+    return this._mainUser;
+  }
 
   Future<User> _convertToUser(FirebaseUser firebaseUser) async {
     if (firebaseUser != null) {
       String id = firebaseUser.uid;
 
       final DocumentSnapshot userDocSnap =
-      await this._firestore.collection("juniors").document(id).get();
+          await this._firestore.collection("juniors").document(id).get();
 
-      final DocumentSnapshot timetable= await this._firestore.collection("timetable").document(id).get();
-
-      if (userDocSnap.exists && timetable.exists) {
+      if (userDocSnap.exists) {
         return new User(
-          photoUrl: userDocSnap.data["photoUrl"],
-          phone: userDocSnap.data["phone"],
-          email: userDocSnap.data["email"],
-          connectedToUid: userDocSnap.data["connectedToUid"],
-          connectedToName: userDocSnap.data["connectedToName"],
-          name: userDocSnap.data["name"],
-          uid: userDocSnap.data["uid"],
-          timetables: timetable.data["timetable"]
+            photoUrl: userDocSnap.data["photoUrl"],
+            phone: userDocSnap.data["phone"],
+            email: userDocSnap.data["email"],
+            connectedToUid: userDocSnap.data["connectedToUid"],
+            connectedToName: userDocSnap.data["connectedToName"],
+            name: userDocSnap.data["name"],
+            uid: userDocSnap.data["uid"],
+          timetableId: userDocSnap.data["timetableId"],
         );
       } else {
         return new User(
@@ -41,10 +75,10 @@ class UserProvider with ChangeNotifier {
           connectedToName: null,
           name: firebaseUser.displayName,
           uid: firebaseUser.uid,
-          timetables: null,
+          timetableId: null,
         );
       }
-    }else{
+    } else {
       return null;
     }
   }
@@ -52,9 +86,9 @@ class UserProvider with ChangeNotifier {
   Future<void> signInWithGoogle() async {
     try {
       final GoogleSignInAccount googleSignInAccount =
-      await _googleSignIn.signIn();
+          await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+          await googleSignInAccount.authentication;
 
       final AuthCredential authCredential = GoogleAuthProvider.getCredential(
         idToken: googleSignInAuthentication.idToken,
@@ -62,10 +96,9 @@ class UserProvider with ChangeNotifier {
       );
 
       final AuthResult authResult =
-      await _firebaseAuth.signInWithCredential(authCredential);
+          await _firebaseAuth.signInWithCredential(authCredential);
 
-      final User user =
-      await this._convertToUser(await this._firebaseAuth.currentUser());
+      await this.setupUser();
 
       await this
           ._firestore
@@ -84,6 +117,10 @@ class UserProvider with ChangeNotifier {
     try {
       await _firebaseAuth.signOut();
       await _googleSignIn.signOut();
+
+      this._mainUser = null;
+      this._seniorUser = null;
+
       notifyListeners();
     } catch (error) {
       print('Error: $error');
@@ -91,7 +128,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<bool> isConnectedToSenior() async {
-    User user = await this.user;
+    User user = this.user;
 
     if (user.connectedToUid == "" || user.connectedToUid == null) {
       return false;
@@ -101,13 +138,15 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<User> get seniorDetails async {
-    User juniorUser = await this.user;
-    DocumentSnapshot seniorDocSnap = await this._firestore
+    User juniorUser = this.user;
+
+    DocumentSnapshot seniorDocSnap = await this
+        ._firestore
         .collection('seniors')
         .document(juniorUser.connectedToUid)
         .get();
-    try{
-      if(seniorDocSnap.exists) {
+    try {
+      if (seniorDocSnap.exists) {
         return new User(
           uid: seniorDocSnap.data["uid"],
           name: seniorDocSnap.data["name"],
@@ -118,7 +157,7 @@ class UserProvider with ChangeNotifier {
           photoUrl: seniorDocSnap.data['photoUrl'],
         );
       }
-    }catch(error){
+    } catch (error) {
       print(error);
     }
     return user;

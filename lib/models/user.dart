@@ -6,17 +6,18 @@ class User {
   final String photoUrl;
   final String connectedToUid;
   final String connectedToName;
-  final Map<String, dynamic> timetables;
+  final String timetableId;
 
-  User(
-      {this.uid,
-      this.name,
-      this.email,
-      this.phone,
-      this.photoUrl,
-      this.connectedToUid,
-      this.connectedToName,
-      this.timetables});
+  User({
+    this.uid,
+    this.name,
+    this.email,
+    this.phone,
+    this.photoUrl,
+    this.connectedToUid,
+    this.connectedToName,
+    this.timetableId,
+  });
 
   Map<String, dynamic> toJson() => {
         'uid': uid,
@@ -26,7 +27,7 @@ class User {
         'photoUrl': photoUrl,
         'connectedToUid': connectedToUid,
         'connectedToName': connectedToName,
-        'timetable': timetables,
+        'timetableId': timetableId,
       };
 
   User.fromJson(Map<String, dynamic> json)
@@ -37,5 +38,5 @@ class User {
         photoUrl = json['photoUrl'],
         connectedToUid = json['connectedToUid'],
         connectedToName = json['connectedToName'],
-        timetables = json['timetables'];
+        timetableId = json['timetableId'];
 }

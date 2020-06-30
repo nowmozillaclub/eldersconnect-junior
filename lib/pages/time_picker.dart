@@ -23,7 +23,7 @@ class _TimePickerState extends State<TimePicker> {
   void _saveTimetable() async {
     UserProvider userprovider= UserProvider();
     User user = await userprovider.user;
-    timetables= user.timetables??{};
+//    timetables= user.timetables??{};
     print(timetables);
     timetables[_pickedTime.format(context).toString()] = task;
     Firestore.instance

@@ -1,7 +1,6 @@
 import 'package:ec_junior/models/models.dart';
 import 'package:ec_junior/pages/pages.dart';
 import 'package:ec_junior/providers/user_provider.dart';
-import 'package:ec_junior/utils/colors.dart';
 import 'package:ec_junior/widgets/drawer.dart';
 import 'package:ec_junior/widgets/photo_circle_avatar.dart';
 import 'package:ec_junior/widgets/senior_detail.dart';
@@ -60,6 +59,7 @@ class HomePage extends StatelessWidget {
     };
 
     UserProvider authenticationProvider = Provider.of<UserProvider>(context);
+    User _mainUser = authenticationProvider.user;
 
     return SafeArea(
       child: Scaffold(
@@ -67,104 +67,88 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           title: Text('EldersConnect Junior'),
           actions: [
-            FutureBuilder(
-              future: authenticationProvider.user,
-              builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-                ConnectionState connectionState = snapshot.connectionState;
-                switch (connectionState) {
-                  case ConnectionState.done:
-                    {
-                      User readyUser = snapshot.data;
-                      return PopupMenuButton(
-                        onSelected: (dynamic optionSelected) async {
-                          await _handleOptionSelection(context, optionSelected);
-                        },
-                        child: PhotoCircleAvatarWidget(
-                          isUnknown: false,
-                          photoUrl: readyUser.photoUrl,
-                        ),
-                        itemBuilder: (_) => [
-                          PopupMenuItem(
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Logged In As',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(5.0),
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                              readyUser.photoUrl,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          readyUser.name,
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            enabled: false,
-                          ),
-                          PopupMenuItem(
-                            child: Text('Settings'),
-                            value: PopUpMenuOptions.Setting,
-                          ),
-                          PopupMenuItem(
-                            child: Text('Reconnect To Senior'),
-                            value: PopUpMenuOptions.Reconnect,
-                          ),
-                          PopupMenuItem(
-                            child: Text('Log Out'),
-                            value: PopUpMenuOptions.LogOut,
-                          ),
-                        ],
-                      );
-                    }
-                  case ConnectionState.active:
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    {
-                      return PhotoCircleAvatarWidget(
-                        isUnknown: true,
-                        photoUrl: null,
-                      );
-                    }
-                }
-                return PhotoCircleAvatarWidget(
-                  isUnknown: true,
-                  photoUrl: null,
-                );
+            PopupMenuButton(
+              onSelected: (dynamic optionSelected) async {
+                await _handleOptionSelection(context, optionSelected);
               },
+              child: PhotoCircleAvatarWidget(
+                isUnknown: false,
+                photoUrl: _mainUser.photoUrl,
+              ),
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Logged In As',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                          ),
+                        ),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    _mainUser.photoUrl,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                _mainUser.name,
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  enabled: false,
+                ),
+                PopupMenuItem(
+                  child: Text('Settings'),
+                  value: PopUpMenuOptions.Setting,
+                ),
+                PopupMenuItem(
+                  child: Text('Reconnect To Senior'),
+                  value: PopUpMenuOptions.Reconnect,
+                ),
+                PopupMenuItem(
+                  child: Text('Log Out'),
+                  value: PopUpMenuOptions.LogOut,
+                ),
+              ],
             ),
           ],
           elevation: 0.0,
           backgroundColor: Colors.transparent,
         ),
         body: Container(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              SeniorDetailsWidget(),
-              SeniorLogsWidget(),
-            ],
-          ),
+          child: authenticationProvider.senior != null
+              ? ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    SeniorDetailsWidget(),
+                    SeniorLogsWidget(),
+                  ],
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                    child: Text(
+                      'No senior connection detected. Please connect to EldersConnect Senior app first.',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
         ),
       ),
     );

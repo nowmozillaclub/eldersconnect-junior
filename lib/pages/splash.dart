@@ -14,20 +14,34 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    // TODO: implement initState
-    final UserProvider authenticationProvider =
-        Provider.of<UserProvider>(context, listen: false);
-
-    authenticationProvider.user.then((user) => {
-          if (user != null)
-            {
-              Navigator.of(context).pushReplacementNamed(HomePage.routeName),
-            }
-          else
-            {
-              Navigator.of(context).pushReplacementNamed(SignInPage.routeName),
-            }
-        });
+    Provider.of<UserProvider>(context, listen: false)
+        .setupUser()
+        .catchError((error) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('An Error Occurred'),
+          content: Text(
+              'An error occurred when signing you in. Please try signing in again.'),
+          actions: [
+            FlatButton(
+              child: Text('OKAY'),
+              onPressed: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(SignInPage.routeName);
+              },
+            )
+          ],
+        ),
+      );
+    }).then((value) {
+      if (value == null) {
+        Navigator.of(context)
+            .pushReplacementNamed(SignInPage.routeName);
+      } else {
+        Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+      }
+    });
 
     super.initState();
   }

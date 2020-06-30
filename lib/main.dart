@@ -14,6 +14,11 @@ class Root extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
         ),
+        ChangeNotifierProxyProvider<UserProvider, TimeTableProvider>(
+          create: (_) => TimeTableProvider(null, null),
+          update: (context, value, previous) =>
+              TimeTableProvider(value.user, value.senior),
+        ),
       ],
       child: MaterialApp(
         title: 'EldersConnect Junior',
