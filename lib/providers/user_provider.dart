@@ -44,7 +44,7 @@ class UserProvider with ChangeNotifier {
           timetables: null,
         );
       }
-    } else {
+    }else{
       return null;
     }
   }
