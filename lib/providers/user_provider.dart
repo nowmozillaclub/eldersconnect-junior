@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:ec_junior/models/models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,18 +11,18 @@ class UserProvider with ChangeNotifier {
   final Firestore _firestore = Firestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  User _mainUser;
-  User _seniorUser;
+  static User _mainUser;
+  static User _seniorUser;
 
   User get user => _mainUser;
 
   User get senior => _seniorUser;
 
   Future<User> setupUser() async {
-    this._mainUser =
+    _mainUser =
         await this._convertToUser(await this._firebaseAuth.currentUser());
 
-    if(this._mainUser.connectedToUid != null) {
+    if(_mainUser.connectedToUid != null) {
       DocumentSnapshot seniorDocSnap = await this
           ._firestore
           .collection('seniors')
@@ -28,7 +30,7 @@ class UserProvider with ChangeNotifier {
           .get();
       try {
         if (seniorDocSnap.exists) {
-          this._seniorUser = new User(
+          _seniorUser = new User(
             uid: seniorDocSnap.data["uid"],
             name: seniorDocSnap.data["name"],
             connectedToName: seniorDocSnap.data["connectedToName"],
@@ -36,16 +38,42 @@ class UserProvider with ChangeNotifier {
             email: seniorDocSnap.data['email'],
             phone: seniorDocSnap.data['phone'],
             photoUrl: seniorDocSnap.data['photoUrl'],
+            timetableId: seniorDocSnap.data['timetableId'],
           );
         }
-      } catch (error) {
+      } catch (error){
         print(error);
       }
     } else {
-      this._seniorUser = null;
+      _seniorUser = null;
     }
+    notifyListeners();
+    return _mainUser;
+  }
 
-    return this._mainUser;
+  void updateTimetableId(String timetableId){
+    print(_mainUser.uid);
+     _mainUser= User(
+      photoUrl: _mainUser.photoUrl,
+      phone: _mainUser.phone,
+      email: _mainUser.email,
+      connectedToUid: _mainUser.connectedToUid,
+      connectedToName: _mainUser.connectedToName,
+      name: _mainUser.name,
+      uid: _mainUser.uid,
+      timetableId: timetableId,
+    );
+     _seniorUser= User(
+       photoUrl: _seniorUser.photoUrl,
+       phone: _seniorUser.phone,
+       email: _seniorUser.email,
+       connectedToUid: _seniorUser.connectedToUid,
+       connectedToName: _seniorUser.connectedToName,
+       name: _seniorUser.name,
+       uid: _seniorUser.uid,
+       timetableId: timetableId,
+     );
+     notifyListeners();
   }
 
   Future<User> _convertToUser(FirebaseUser firebaseUser) async {
@@ -105,7 +133,6 @@ class UserProvider with ChangeNotifier {
           .collection('juniors')
           .document(user.uid)
           .setData(user.toJson());
-
       notifyListeners();
     } catch (error) {
       // TODO: Implement Better Error Handling For Providers.
@@ -118,8 +145,8 @@ class UserProvider with ChangeNotifier {
       await _firebaseAuth.signOut();
       await _googleSignIn.signOut();
 
-      this._mainUser = null;
-      this._seniorUser = null;
+      _mainUser = null;
+      _seniorUser = null;
 
       notifyListeners();
     } catch (error) {

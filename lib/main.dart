@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ec_junior/providers/providers.dart';
 
+//todo: Debug for pixel 3a oreo photourl called on null
+
 void main() => runApp(Root());
 
 class Root extends StatelessWidget {

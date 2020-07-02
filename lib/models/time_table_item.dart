@@ -12,8 +12,8 @@ enum Day {
 
 class TimetableItem {
   final String title;
-  final TimeOfDay time;
-  final List<Day> days;
+  final String time;
+  final List<dynamic> days;
 
   TimetableItem({this.title, this.time, this.days});
 }

@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'package:ec_junior/models/models.dart';
+
+import '../providers/timetable_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../models/user.dart';
 
@@ -20,23 +24,22 @@ class _TimePickerState extends State<TimePicker> {
     setState(() {});
   }
 
-  void _saveTimetable() async {
-    UserProvider userprovider= UserProvider();
-    User user = await userprovider.user;
-//    timetables= user.timetables??{};
-    print(timetables);
-    timetables[_pickedTime.format(context).toString()] = task;
-    Firestore.instance
-        .collection('timetable')
-        .document(user.uid)
-        .setData({
-      'juniorId': user.uid,
-      'seniorId': user.connectedToUid,
-      'timetable': timetables,
-    });
-    print(timetables);
-    Navigator.of(context).pop();
-  }
+//  void _saveTimetable() async {
+//    UserProvider userprovider= UserProvider();
+//    User user = await userprovider.user;
+//    print(timetables);
+//    timetables[_pickedTime.format(context).toString()] = task;
+//    Firestore.instance
+//        .collection('timetable')
+//        .document(user.uid)
+//        .setData({
+//      'juniorId': user.uid,
+//      'seniorId': user.connectedToUid,
+//      'timetable': timetables,
+//    });
+//    print(timetables);
+//    Navigator.of(context).pop();
+//  }
 
   Widget timetableInput() {
     return Container(
@@ -59,9 +62,9 @@ class _TimePickerState extends State<TimePicker> {
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
+    final timetableProvider= Provider.of<TimeTableProvider>(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -100,7 +103,10 @@ class _TimePickerState extends State<TimePicker> {
                   ),
                   IconButton(
                     icon: Icon(Icons.save),
-                    onPressed: _saveTimetable,
+                    onPressed: (){
+                      TimetableItem timetableitem = TimetableItem(title: task, days: ["Monday"], time: _pickedTime.format(context).toString());
+                      timetableProvider.addTimetable(timetableitem);
+                    },
                   ),
                 ],
               ),

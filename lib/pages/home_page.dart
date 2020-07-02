@@ -60,6 +60,7 @@ class HomePage extends StatelessWidget {
 
     UserProvider authenticationProvider = Provider.of<UserProvider>(context);
     User _mainUser = authenticationProvider.user;
+    print(_mainUser.timetableId);
 
     return SafeArea(
       child: Scaffold(
