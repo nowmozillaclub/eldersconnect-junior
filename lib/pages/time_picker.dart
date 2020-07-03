@@ -19,6 +19,7 @@ class _TimePickerState extends State<TimePicker> {
   String task = '';
   List<String> days = [];
   Map<String, dynamic> timetables = {};
+  bool tapped=false;
 
   Future<Null> selectTime(BuildContext context) async {
     _pickedTime = await showTimePicker(context: context, initialTime: _time);
@@ -75,6 +76,9 @@ class _TimePickerState extends State<TimePicker> {
                       child: Text("Select"),
                       onPressed: () {
                         onTapOfCheckBox(index);
+                        setState(() {
+                          tapped=!tapped;
+                        });
                         Navigator.of(context).pop();
                       },
                     ),
@@ -180,7 +184,7 @@ class _TimePickerState extends State<TimePicker> {
                   color: Colors.purple,
                   height: 40,
                   width: double.infinity,
-                  child: Text("Set Day"),
+                  child: Text(tapped?"The Day has been set": "Set Day"),
                 ),
               ),
             ],
