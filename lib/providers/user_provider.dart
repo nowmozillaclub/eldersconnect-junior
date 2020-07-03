@@ -51,7 +51,22 @@ class UserProvider with ChangeNotifier {
     return _mainUser;
   }
 
-  void updateTimetableId(String timetableId){
+  Future<void> updateTimetableId(String timetableId) async{
+    await this
+        ._firestore
+        .collection("juniors")
+        .document(_mainUser.uid)
+        .updateData({
+      "timetableId": timetableId,
+    });
+
+    await this
+        ._firestore
+        .collection("seniors")
+        .document(_seniorUser.uid)
+        .updateData({
+      "timetableId": timetableId,
+    });
     print(_mainUser.uid);
      _mainUser= User(
       photoUrl: _mainUser.photoUrl,

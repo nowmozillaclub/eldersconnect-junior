@@ -17,6 +17,7 @@ class _TimePickerState extends State<TimePicker> {
   TimeOfDay _time = TimeOfDay.now();
   TimeOfDay _pickedTime;
   String task = '';
+  List<String> days = [];
   Map<String, dynamic> timetables = {};
 
   Future<Null> selectTime(BuildContext context) async {
@@ -41,6 +42,53 @@ class _TimePickerState extends State<TimePicker> {
 //    Navigator.of(context).pop();
 //  }
 
+  //TODO: Copy function to onTap of check
+  void onTapOfCheckBox(int index) {
+    days.add(daysOfWeek[index]);
+  }
+
+  List<String> daysOfWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ];
+
+  Widget showDayPicker() {
+    return SingleChildScrollView(
+      child: Container(
+        width: 150,
+        height: 200,
+        child: ListView.builder(
+          itemCount: daysOfWeek.length,
+          itemBuilder: (context, index) {
+            return SingleChildScrollView(
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("${daysOfWeek[index]}"),
+                    RaisedButton(
+                      child: Text("Select"),
+                      onPressed: () {
+                        onTapOfCheckBox(index);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    //TODO: OnTap function of check box
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   Widget timetableInput() {
     return Container(
       decoration: BoxDecoration(
@@ -62,9 +110,10 @@ class _TimePickerState extends State<TimePicker> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    final timetableProvider= Provider.of<TimeTableProvider>(context);
+    final timetableProvider = Provider.of<TimeTableProvider>(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -102,13 +151,37 @@ class _TimePickerState extends State<TimePicker> {
                     },
                   ),
                   IconButton(
+                    color: Theme.of(context).accentColor,
                     icon: Icon(Icons.save),
-                    onPressed: (){
-                      TimetableItem timetableitem = TimetableItem(title: task, days: ["Monday"], time: _pickedTime.format(context).toString());
+                    onPressed: () {
+                      TimetableItem timetableitem = TimetableItem(
+                          title: task,
+                          days: days,
+                          time: _pickedTime.format(context).toString());
                       timetableProvider.addTimetable(timetableitem);
+                      Navigator.of(context).pop();
                     },
                   ),
                 ],
+              ),
+              SizedBox(height: 10,),
+              InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      child: AlertDialog(
+                        content: showDayPicker(),
+                        actions: <Widget>[],
+                      ));
+                  FocusScope.of(context).unfocus();
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  color: Colors.purple,
+                  height: 40,
+                  width: double.infinity,
+                  child: Text("Set Day"),
+                ),
               ),
             ],
           ),

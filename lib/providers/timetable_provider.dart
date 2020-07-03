@@ -3,6 +3,7 @@ import 'package:ec_junior/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class TimeTableProvider with ChangeNotifier {
   final User _mainUser;
@@ -12,6 +13,7 @@ class TimeTableProvider with ChangeNotifier {
 
   TimeTableProvider(this._mainUser, this._senior) {
     getTimeTable();
+    print("constructor");
   }
 
   Future<void> getTimeTable() async{
@@ -63,23 +65,10 @@ class TimeTableProvider with ChangeNotifier {
             }
           ],
         });
-        await this
-            ._firestore
-            .collection("juniors")
-            .document(_mainUser.uid)
-            .updateData({
-          "timetableId": timetableDocRef.documentID,
-        });
-
-        await this
-            ._firestore
-            .collection("seniors")
-            .document(_senior.uid)
-            .updateData({
-          "timetableId": timetableDocRef.documentID,
-        });
-        UserProvider().updateTimetableId(timetableDocRef.documentID);
+        await UserProvider().updateTimetableId(timetableDocRef.documentID);
+        // constructor is not called even though there is notifylistener() inside updateTimetableId()
       } else {
+        print("inside else");
         DocumentSnapshot currentTimetableDoc = await _firestore
             .collection('timetable')
             .document(_mainUser.timetableId)

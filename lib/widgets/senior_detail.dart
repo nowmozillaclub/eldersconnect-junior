@@ -18,59 +18,61 @@ class SeniorDetailsWidget extends StatelessWidget {
       width: (MediaQuery.of(context).size.width * 0.8),
       margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
       padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-      child: Column(
-        children: [
-          Text(
-            'Senior Details',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 50.0,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(
+              'Senior Details',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 50.0,
+              ),
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-          ),
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(senior.photoUrl),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.05,
-              ),
-              Text(
-                senior.name,
-                style: TextStyle(
-                  fontSize: 30.0,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+            ),
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(senior.photoUrl),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.red,
-                child: Icon(
-                  Icons.favorite,
-                  color: Colors.white,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.05,
                 ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.05,
-              ),
-              Text(
-                'Healthy/Unwell',
-                style: TextStyle(
-                  fontSize: 20.0,
+                Text(
+                  senior.name,
+                  style: TextStyle(
+                    fontSize: 30.0,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
+            ),
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.red,
+                  child: Icon(
+                    Icons.favorite,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.05,
+                ),
+                Text(
+                  'Healthy/Unwell',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
