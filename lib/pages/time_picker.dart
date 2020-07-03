@@ -170,7 +170,7 @@ class _TimePickerState extends State<TimePicker> {
               ),
               SizedBox(height: 10,),
               InkWell(
-                onTap: () {
+                onTap:tapped?(){}: () {
                   showDialog(
                       context: context,
                       child: AlertDialog(
