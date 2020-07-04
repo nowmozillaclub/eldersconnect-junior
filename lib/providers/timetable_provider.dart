@@ -9,11 +9,11 @@ class TimeTableProvider with ChangeNotifier {
   final User _mainUser;
   final User _senior;
   final Firestore _firestore = Firestore.instance;
-  List<TimetableItem> _timetableList=[];
+  List<TimetableItem> _timetableList = [];
+  final Function setupUser;
 
-  TimeTableProvider(this._mainUser, this._senior) {
+  TimeTableProvider(this._mainUser, this._senior, this.setupUser) {
     getTimeTable();
-    print("constructor");
   }
 
   Future<void> getTimeTable() async{
@@ -66,7 +66,6 @@ class TimeTableProvider with ChangeNotifier {
           ],
         });
         await UserProvider().updateTimetableId(timetableDocRef.documentID);
-        // constructor is not called even though there is notifylistener() inside updateTimetableId()
       } else {
         print("inside else");
         DocumentSnapshot currentTimetableDoc = await _firestore
@@ -87,6 +86,8 @@ class TimeTableProvider with ChangeNotifier {
             .updateData({
           "timetable": currentTimetable,
         });
+
+        setupUser();
       }
     } catch (error) {
       print(error);

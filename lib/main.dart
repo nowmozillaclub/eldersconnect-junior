@@ -1,10 +1,10 @@
 import 'package:ec_junior/pages/pages.dart';
+import 'package:ec_junior/pages/time_picker.dart';
 import 'package:ec_junior/utils/utils.dart' show ColorConfig;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ec_junior/providers/providers.dart';
 
-//todo: Debug for pixel 3a oreo photourl called on null
 
 void main() => runApp(Root());
 
@@ -17,9 +17,9 @@ class Root extends StatelessWidget {
           create: (context) => UserProvider(),
         ),
         ChangeNotifierProxyProvider<UserProvider, TimeTableProvider>(
-          create: (_) => TimeTableProvider(null, null),
+          create: (_) => TimeTableProvider(null, null, null),
           update: (context, value, previous) =>
-              TimeTableProvider(value.user, value.senior),
+              TimeTableProvider(value.user, value.senior, value.setupUser),
         ),
       ],
       child: MaterialApp(
@@ -35,6 +35,7 @@ class Root extends StatelessWidget {
         routes: {
           SignInPage.routeName: (context) => SignInPage(),
           HomePage.routeName: (context) => HomePage(),
+          TimePicker.routeName: (context) => TimePicker(),
         },
         home: SplashPage(),
       ),

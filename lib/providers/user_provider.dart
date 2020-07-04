@@ -11,11 +11,10 @@ class UserProvider with ChangeNotifier {
   final Firestore _firestore = Firestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  static User _mainUser;
-  static User _seniorUser;
+  User _mainUser;
+  User _seniorUser;
 
   User get user => _mainUser;
-
   User get senior => _seniorUser;
 
   Future<User> setupUser() async {
@@ -159,9 +158,6 @@ class UserProvider with ChangeNotifier {
     try {
       await _firebaseAuth.signOut();
       await _googleSignIn.signOut();
-
-      _mainUser = null;
-      _seniorUser = null;
 
       notifyListeners();
     } catch (error) {

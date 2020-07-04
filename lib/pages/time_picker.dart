@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'package:ec_junior/models/models.dart';
 
-import '../providers/timetable_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ec_junior/models/models.dart';
+import 'package:ec_junior/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/user_provider.dart';
-import '../models/user.dart';
+import 'package:ec_junior/providers/providers.dart';
 
 class TimePicker extends StatefulWidget {
+
+  static final String routeName = "/time-picker";
+
   @override
   _TimePickerState createState() => _TimePickerState();
 }
@@ -19,7 +20,7 @@ class _TimePickerState extends State<TimePicker> {
   String task = '';
   List<String> days = [];
   Map<String, dynamic> timetables = {};
-  bool tapped=false;
+  bool tapped = false;
 
   Future<Null> selectTime(BuildContext context) async {
     _pickedTime = await showTimePicker(context: context, initialTime: _time);
@@ -77,7 +78,7 @@ class _TimePickerState extends State<TimePicker> {
                       onPressed: () {
                         onTapOfCheckBox(index);
                         setState(() {
-                          tapped=!tapped;
+                          tapped = !tapped;
                         });
                         Navigator.of(context).pop();
                       },
@@ -120,6 +121,12 @@ class _TimePickerState extends State<TimePicker> {
     final timetableProvider = Provider.of<TimeTableProvider>(context);
     return SafeArea(
       child: Scaffold(
+        drawer: MainDrawer(),
+        appBar: AppBar(
+          title: Text('Set Senior Timetable'),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+        ),
         body: Padding(
           padding: EdgeInsets.all(8),
           child: Column(
@@ -168,23 +175,27 @@ class _TimePickerState extends State<TimePicker> {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               InkWell(
-                onTap:tapped?(){}: () {
-                  showDialog(
-                      context: context,
-                      child: AlertDialog(
-                        content: showDayPicker(),
-                        actions: <Widget>[],
-                      ));
-                  FocusScope.of(context).unfocus();
-                },
+                onTap: tapped
+                    ? () {}
+                    : () {
+                        showDialog(
+                            context: context,
+                            child: AlertDialog(
+                              content: showDayPicker(),
+                              actions: <Widget>[],
+                            ));
+                        FocusScope.of(context).unfocus();
+                      },
                 child: Container(
                   alignment: Alignment.center,
                   color: Colors.purple,
                   height: 40,
                   width: double.infinity,
-                  child: Text(tapped?"The Day has been set": "Set Day"),
+                  child: Text(tapped ? "The Day has been set" : "Set Day"),
                 ),
               ),
             ],
