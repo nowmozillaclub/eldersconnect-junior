@@ -48,7 +48,7 @@ class MainDrawer extends StatelessWidget {
                 Icons.timer,
               ),
               () {
-                Navigator.of(context).pushReplacementNamed(TimePicker.routeName);
+                Navigator.of(context).pushNamed(TimePicker.routeName);
               },
             ),
 

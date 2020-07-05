@@ -1,7 +1,8 @@
 import 'dart:async';
-
+import 'package:analog_clock/analog_clock.dart';
 import 'package:ec_junior/models/models.dart';
 import 'package:ec_junior/widgets/drawer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ec_junior/providers/providers.dart';
@@ -20,78 +21,32 @@ class _TimePickerState extends State<TimePicker> {
   String task = '';
   List<String> days = [];
   Map<String, dynamic> timetables = {};
-  bool tapped = false;
+  bool tapped=false;
+  final taskController=TextEditingController();
 
   Future<Null> selectTime(BuildContext context) async {
     _pickedTime = await showTimePicker(context: context, initialTime: _time);
     setState(() {});
   }
 
-//  void _saveTimetable() async {
-//    UserProvider userprovider= UserProvider();
-//    User user = await userprovider.user;
-//    print(timetables);
-//    timetables[_pickedTime.format(context).toString()] = task;
-//    Firestore.instance
-//        .collection('timetable')
-//        .document(user.uid)
-//        .setData({
-//      'juniorId': user.uid,
-//      'seniorId': user.connectedToUid,
-//      'timetable': timetables,
-//    });
-//    print(timetables);
-//    Navigator.of(context).pop();
-//  }
 
-  //TODO: Copy function to onTap of check
   void onTapOfCheckBox(int index) {
     days.add(daysOfWeek[index]);
   }
 
   List<String> daysOfWeek = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday'
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+    'Sun'
   ];
 
-  Widget showDayPicker() {
-    return SingleChildScrollView(
-      child: Container(
-        width: 150,
-        height: 200,
-        child: ListView.builder(
-          itemCount: daysOfWeek.length,
-          itemBuilder: (context, index) {
-            return SingleChildScrollView(
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("${daysOfWeek[index]}"),
-                    RaisedButton(
-                      child: Text("Select"),
-                      onPressed: () {
-                        onTapOfCheckBox(index);
-                        setState(() {
-                          tapped = !tapped;
-                        });
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    //TODO: OnTap function of check box
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
+  void dispose(){
+    taskController.dispose();
+    super.dispose();
   }
 
   Widget timetableInput() {
@@ -103,6 +58,7 @@ class _TimePickerState extends State<TimePicker> {
       child: Padding(
         padding: EdgeInsets.all(10.0),
         child: TextField(
+          controller: taskController,
           key: ValueKey("task"),
           keyboardType: TextInputType.text,
           decoration: InputDecoration(labelText: "Task"),
@@ -115,6 +71,45 @@ class _TimePickerState extends State<TimePicker> {
       ),
     );
   }
+
+  Widget showDayPicker() {
+    return SingleChildScrollView(
+      child: Container(
+        width: double.infinity,
+        height: 100,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: daysOfWeek.length,
+          itemBuilder: (context, index) {
+            return SingleChildScrollView(
+              child: Container(
+                    child: RawMaterialButton(
+                      onPressed:() {
+                        onTapOfCheckBox(index);
+                        setState(() {
+                          tapped=!tapped;
+                        });
+                      },
+                      elevation: 3.0,
+                      fillColor: Color.fromRGBO(100, 220, 180, 0.2),
+                      child: FittedBox(
+                        child: Text(
+                          "${daysOfWeek[index]}"
+                        ),
+                      ),
+                      padding: EdgeInsets.all(15.0),
+                      shape: CircleBorder(
+                      ),
+                    ),
+                    //TODO: OnTap function of check box
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -129,76 +124,74 @@ class _TimePickerState extends State<TimePicker> {
         ),
         body: Padding(
           padding: EdgeInsets.all(8),
-          child: Column(
-            children: <Widget>[
-              ClipRRect(
-                child: Image.asset('assets/icon/timerimg.jpeg'),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+            AnalogClock(
+              height: 200,
+            decoration: BoxDecoration(
+                border: Border.all(width: 2.0, color: Colors.black),
+              color: Colors.purple.withOpacity(0.4),
+              shape: BoxShape.circle),
+          width: 150.0,
+          isLive: true,
+          hourHandColor: Colors.white,
+          minuteHandColor: Colors.white,
+          showSecondHand: true,
+          secondHandColor: Colors.red,
+          numberColor: Colors.amber,
+          showNumbers: true,
+          textScaleFactor: 2.0,
+          showTicks: false,
+          showDigitalClock: true,
+          datetime:DateTime.now(),
+        ),
+                timetableInput(),
+                SizedBox(
+                  height: 10.0,
                 ),
-              ),
-              timetableInput(),
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RaisedButton(
-                    color: Colors.purple,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(17)),
-                    child: Text(
-                      _pickedTime == null
-                          ? "Set Time"
-                          : _pickedTime.format(context).toString(),
-                      style: TextStyle(
-                        color: Colors.white,
+                    RaisedButton(
+                      splashColor: Colors.amber,
+                      color: Colors.purple,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Text(
+                        _pickedTime == null
+                            ? "Set Time"
+                            : _pickedTime.format(context).toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      selectTime(context);
-                      print(_pickedTime.toString());
-                    },
-                  ),
-                  IconButton(
-                    color: Theme.of(context).accentColor,
-                    icon: Icon(Icons.save),
-                    onPressed: () {
-                      TimetableItem timetableitem = TimetableItem(
-                          title: task,
-                          days: days,
-                          time: _pickedTime.format(context).toString());
-                      timetableProvider.addTimetable(timetableitem);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              InkWell(
-                onTap: tapped
-                    ? () {}
-                    : () {
-                        showDialog(
-                            context: context,
-                            child: AlertDialog(
-                              content: showDayPicker(),
-                              actions: <Widget>[],
-                            ));
-                        FocusScope.of(context).unfocus();
+                      onPressed: () {
+                        selectTime(context);
+                        print(_pickedTime.toString());
                       },
-                child: Container(
-                  alignment: Alignment.center,
-                  color: Colors.purple,
-                  height: 40,
-                  width: double.infinity,
-                  child: Text(tapped ? "The Day has been set" : "Set Day"),
+                    ),
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
+              showDayPicker(),
+                InkWell(
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(15)),
+                    child: Text("Save"),alignment: Alignment.center,
+                  ),
+                  onTap: () {
+                    TimetableItem timetableitem = TimetableItem(
+                        title: task,
+                        days: days,
+                        time: _pickedTime.format(context).toString());
+                    timetableProvider.addTimetable(timetableitem);
+                    FocusScope.of(context).unfocus();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
