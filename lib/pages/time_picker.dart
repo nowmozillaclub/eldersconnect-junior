@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:ec_junior/providers/providers.dart';
 
 class TimePicker extends StatefulWidget {
-
   static final String routeName = "/time-picker";
 
   @override
@@ -21,30 +20,21 @@ class _TimePickerState extends State<TimePicker> {
   String task = '';
   List<String> days = [];
   Map<String, dynamic> timetables = {};
-  bool tapped=false;
-  final taskController=TextEditingController();
+  bool tapped = false;
+  final taskController = TextEditingController();
 
   Future<Null> selectTime(BuildContext context) async {
     _pickedTime = await showTimePicker(context: context, initialTime: _time);
     setState(() {});
   }
 
-
   void onTapOfCheckBox(int index) {
     days.add(daysOfWeek[index]);
   }
 
-  List<String> daysOfWeek = [
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun'
-  ];
+  List<String> daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-  void dispose(){
+  void dispose() {
     taskController.dispose();
     super.dispose();
   }
@@ -83,25 +73,22 @@ class _TimePickerState extends State<TimePicker> {
           itemBuilder: (context, index) {
             return SingleChildScrollView(
               child: Container(
-                    child: RawMaterialButton(
-                      onPressed:() {
-                        onTapOfCheckBox(index);
-                        setState(() {
-                          tapped=!tapped;
-                        });
-                      },
-                      elevation: 3.0,
-                      fillColor: Color.fromRGBO(100, 220, 180, 0.2),
-                      child: FittedBox(
-                        child: Text(
-                          "${daysOfWeek[index]}"
-                        ),
-                      ),
-                      padding: EdgeInsets.all(15.0),
-                      shape: CircleBorder(
-                      ),
-                    ),
-                    //TODO: OnTap function of check box
+                child: RawMaterialButton(
+                  onPressed: () {
+                    onTapOfCheckBox(index);
+                    setState(() {
+                      tapped = !tapped;
+                    });
+                  },
+                  elevation: 3.0,
+                  fillColor: Color.fromRGBO(100, 220, 180, 0.2),
+                  child: FittedBox(
+                    child: Text("${daysOfWeek[index]}"),
+                  ),
+                  padding: EdgeInsets.all(15.0),
+                  shape: CircleBorder(),
+                ),
+                //TODO: OnTap function of check box
               ),
             );
           },
@@ -109,7 +96,6 @@ class _TimePickerState extends State<TimePicker> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -127,58 +113,61 @@ class _TimePickerState extends State<TimePicker> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-            AnalogClock(
-              height: 200,
-            decoration: BoxDecoration(
-                border: Border.all(width: 2.0, color: Colors.black),
-              color: Colors.purple.withOpacity(0.4),
-              shape: BoxShape.circle),
-          width: 150.0,
-          isLive: true,
-          hourHandColor: Colors.white,
-          minuteHandColor: Colors.white,
-          showSecondHand: true,
-          secondHandColor: Colors.red,
-          numberColor: Colors.amber,
-          showNumbers: true,
-          textScaleFactor: 2.0,
-          showTicks: false,
-          showDigitalClock: true,
-          datetime:DateTime.now(),
-        ),
+                AnalogClock(
+                  height: 200,
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 2.0, color: Colors.black),
+                      color: Colors.purple.withOpacity(0.4),
+                      shape: BoxShape.circle),
+                  width: 150.0,
+                  isLive: true,
+                  hourHandColor: Colors.white,
+                  minuteHandColor: Colors.white,
+                  showSecondHand: true,
+                  secondHandColor: Colors.red,
+                  numberColor: Colors.amber,
+                  showNumbers: true,
+                  textScaleFactor: 2.0,
+                  showTicks: false,
+                  showDigitalClock: true,
+                  datetime: DateTime.now(),
+                ),
                 timetableInput(),
                 SizedBox(
                   height: 10.0,
                 ),
-                    RaisedButton(
-                      splashColor: Colors.amber,
-                      color: Colors.purple,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Text(
-                        _pickedTime == null
-                            ? "Set Time"
-                            : _pickedTime.format(context).toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                        ),
-                      ),
-                      onPressed: () {
-                        selectTime(context);
-                        print(_pickedTime.toString());
-                      },
+                RaisedButton(
+                  splashColor: Colors.amber,
+                  color: Colors.purple,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Text(
+                    _pickedTime == null
+                        ? "Set Time"
+                        : _pickedTime.format(context).toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
                     ),
+                  ),
+                  onPressed: () {
+                    selectTime(context);
+                    print(_pickedTime.toString());
+                  },
+                ),
                 SizedBox(
                   height: 20,
                 ),
-              showDayPicker(),
+                showDayPicker(),
                 InkWell(
                   child: Container(
                     height: 50,
                     width: double.infinity,
-                    decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(15)),
-                    child: Text("Save"),alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.purple,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Text("Save"),
+                    alignment: Alignment.center,
                   ),
                   onTap: () {
                     TimetableItem timetableitem = TimetableItem(

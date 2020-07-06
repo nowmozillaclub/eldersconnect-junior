@@ -3,7 +3,6 @@ import 'package:ec_junior/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 
 class TimeTableProvider with ChangeNotifier {
   final User _mainUser;
@@ -11,8 +10,9 @@ class TimeTableProvider with ChangeNotifier {
   final Firestore _firestore = Firestore.instance;
   List<TimetableItem> _timetableList = [];
   final Function setupUser;
+  final Function updateTimetableId;
 
-  TimeTableProvider(this._mainUser, this._senior, this.setupUser) {
+  TimeTableProvider(this._mainUser, this._senior, this.setupUser, this.updateTimetableId) {
     getTimeTable();
   }
 
@@ -65,7 +65,7 @@ class TimeTableProvider with ChangeNotifier {
             }
           ],
         });
-        await UserProvider().updateTimetableId(timetableDocRef.documentID);
+        await updateTimetableId(timetableDocRef.documentID);
       } else {
         print("inside else");
         DocumentSnapshot currentTimetableDoc = await _firestore
