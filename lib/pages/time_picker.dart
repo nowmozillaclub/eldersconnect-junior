@@ -152,7 +152,6 @@ class _TimePickerState extends State<TimePicker> {
                   ),
                   onPressed: () {
                     selectTime(context);
-                    print(_pickedTime.toString());
                   },
                 ),
                 SizedBox(

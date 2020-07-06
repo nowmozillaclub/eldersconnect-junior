@@ -66,7 +66,6 @@ class UserProvider with ChangeNotifier {
         .updateData({
       "timetableId": timetableId,
     });
-    print(_mainUser.uid);
      _mainUser= User(
       photoUrl: _mainUser.photoUrl,
       phone: _mainUser.phone,

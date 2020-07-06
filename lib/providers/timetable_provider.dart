@@ -1,5 +1,4 @@
 import 'package:ec_junior/models/models.dart';
-import 'package:ec_junior/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,21 +36,16 @@ class TimeTableProvider with ChangeNotifier {
         );
 
         _timetableList.add(timetableItem);
-        print(element['title']);
       });
     }
   }
 
   Future<void> addTimetable(TimetableItem timetableItem) async {
     try {
-      print(_mainUser.timetableId == null);
-      print(_senior.timetableId==null);
-      print(_mainUser.timetableId);
 
       if (_mainUser.timetableId == null && _senior.timetableId == null) {
         List<TimetableItem> timetableList = [];
         timetableList.add(timetableItem);
-        print(timetableList);
 
         DocumentReference timetableDocRef =
             await _firestore.collection('timetable').add({
@@ -67,7 +61,6 @@ class TimeTableProvider with ChangeNotifier {
         });
         await updateTimetableId(timetableDocRef.documentID);
       } else {
-        print("inside else");
         DocumentSnapshot currentTimetableDoc = await _firestore
             .collection('timetable')
             .document(_mainUser.timetableId)
