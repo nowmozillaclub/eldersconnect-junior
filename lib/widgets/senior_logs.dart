@@ -1,72 +1,61 @@
+import 'package:ec_junior/models/user.dart';
+import 'package:ec_junior/providers/providers.dart';
 import 'package:ec_junior/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class SeniorLogs extends StatelessWidget {
-  final Map<String, Map<String, String>> seniorlogs;
-
-  SeniorLogs({Key key, this.seniorlogs}) : super(key: key);
-
-  Widget buildLogs(BuildContext context, int index) {
-    String key = this.seniorlogs.keys.elementAt(index);
-    Map<String, String> dayLog = this.seniorlogs[key];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          '$key',
-          style: TextStyle(fontSize: 16.0, color: Colors.white70),
-        ),
-        ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: dayLog.length,
-          itemBuilder: (BuildContext context, int index) {
-            String timeKey = dayLog.keys.elementAt(index);
-            String log = dayLog[timeKey];
-            return Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: Row(
-                children: <Widget>[
-                  Text('$timeKey', style: TextStyle(color: Colors.white70)),
-                  Text(':', style: TextStyle(color: Colors.white70)),
-                  Text('$log'),
-                ],
-              ),
-            );
-          },
-        )
-      ],
-    );
-  }
-
+class SeniorLogsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        color: MyColors.primary,
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: Text(
-                'Senior Logs',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                    color: MyColors.white),
-              ),
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    User senior = userProvider.senior;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: ColorConfig.primary,
+      ),
+      width: (MediaQuery.of(context).size.width * 0.8),
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+      child: Column(
+        children: [
+          Text(
+            'Senior Logs',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 50.0,
             ),
-            ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: this.seniorlogs.length,
-                itemBuilder: buildLogs),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.05,
+          ),
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(senior.photoUrl),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+              ),
+              Text(
+                senior.name,
+                style: TextStyle(
+                  fontSize: 30.0,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
+          Row(
+            children: [
+              Text('Logs go here'),
+            ],
+          ),
+        ],
       ),
     );
   }
