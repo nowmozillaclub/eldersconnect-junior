@@ -42,7 +42,6 @@ class TimeTableProvider with ChangeNotifier {
 
   Future<void> addTimetable(TimetableItem timetableItem) async {
     try {
-
       if (_mainUser.timetableId == null && _senior.timetableId == null) {
         List<TimetableItem> timetableList = [];
         timetableList.add(timetableItem);

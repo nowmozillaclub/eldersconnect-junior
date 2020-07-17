@@ -1,5 +1,6 @@
 import 'package:ec_junior/models/models.dart';
 import 'package:ec_junior/pages/pages.dart';
+import 'package:ec_junior/pages/time_picker.dart';
 import 'package:ec_junior/providers/user_provider.dart';
 import 'package:ec_junior/widgets/drawer.dart';
 import 'package:ec_junior/widgets/photo_circle_avatar.dart';
@@ -67,6 +68,7 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           title: Text('EldersConnect Junior'),
           actions: [
+            IconButton(icon: Icon(Icons.add), onPressed: ()=> Navigator.pushNamed(context, TimePicker.routeName)),
             PopupMenuButton(
               onSelected: (dynamic optionSelected) async {
                 await _handleOptionSelection(context, optionSelected);

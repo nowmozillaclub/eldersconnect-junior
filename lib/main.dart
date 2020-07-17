@@ -1,5 +1,6 @@
 import 'package:ec_junior/pages/pages.dart';
 import 'package:ec_junior/pages/time_picker.dart';
+import 'package:ec_junior/pages/timetableviewer.dart';
 import 'package:ec_junior/utils/utils.dart' show ColorConfig;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,7 @@ class Root extends StatelessWidget {
           SignInPage.routeName: (context) => SignInPage(),
           HomePage.routeName: (context) => HomePage(),
           TimePicker.routeName: (context) => TimePicker(),
+          TimeTableView.routeName: (context)=> TimeTableView(),
         },
         home: SplashPage(),
       ),
