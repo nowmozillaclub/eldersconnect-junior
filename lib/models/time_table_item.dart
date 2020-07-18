@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 enum Day {
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-  Sunday,
+  Mon,
+  Tue,
+  Wed,
+  Thur,
+  Fri,
+  Sat,
+  Sun,
 }
 
 class TimetableItem {
