@@ -60,12 +60,12 @@ final TimetableItem item;
                    child:
                        Builder(
                          builder: (context) {
-                           item.days.forEach((title) => text+=days[title]+', ');
-                           return
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                               children: <Widget>[
-                             Flexible(child: Container(child: Text(text, overflow: TextOverflow.ellipsis,))),],);
+                           print("Here it comes onetwo");
+                           print(item.days);
+                           item.days.forEach((element) => text+=days[element] + ', ');
+                           print("Here it comes");
+                           print(text);
+                           return Text(text, overflow: TextOverflow.ellipsis,);
                          },
                        ),
                    ),

@@ -23,12 +23,15 @@ class _TimeTableViewState extends State<TimeTableView> {
     print(docSnap.data['timetable']);
     return docSnap;
   }
+
   @override
   Widget build(BuildContext context) {
     final usr = Provider.of<UserProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text("TimeTable"),),
+      appBar: AppBar(
+        title: Text("TimeTable"),
+      ),
       body: FutureBuilder(
         future: handleSearch(usr),
         builder: (context, snapshots) {
@@ -39,7 +42,10 @@ class _TimeTableViewState extends State<TimeTableView> {
             print(timetableItems.length);
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                var item = TimetableItem(title: timetableItems[index]['title'], time: timetableItems[index]['time'], days: timetableItems[index]['days']);
+                var item = TimetableItem(
+                    title: timetableItems[index]['title'],
+                    time: timetableItems[index]['time'],
+                    days: timetableItems[index]['days']);
                 return Padding(
                   padding: EdgeInsets.all(8),
                   child: TimeTableTile(
