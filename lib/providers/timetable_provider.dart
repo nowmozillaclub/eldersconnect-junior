@@ -7,7 +7,7 @@ class TimeTableProvider with ChangeNotifier {
   final User _mainUser;
   final User _senior;
   final Firestore _firestore = Firestore.instance;
-  List<TimetableItem> _timetableList = [];
+  static List<TimetableItem> _timetableList = [];
   final Function setupUser;
   final Function updateTimetableId;
 
@@ -70,7 +70,7 @@ class TimeTableProvider with ChangeNotifier {
           'title': timetableItem.title,
           'time': timetableItem.time
         });
-        this._timetableList.add(timetableItem);
+        _timetableList.add(timetableItem);
         await this
             ._firestore
             .collection("timetable")
@@ -84,6 +84,15 @@ class TimeTableProvider with ChangeNotifier {
     } catch (error) {
       print(error);
     }
+  }
+
+  void deleteTimeTabelItem(TimetableItem item) async {
+    DocumentSnapshot doc = await _firestore.collection('timetable').document(_mainUser.timetableId).get();
+    List<dynamic> currTimetable = doc.data['timetable'];
+    currTimetable.removeWhere((element) => element['title'] == item.title);
+    print(currTimetable.length);
+    await _firestore.collection('timetable').document(_mainUser.timetableId).updateData({'timetable': currTimetable});
+    _timetableList.removeWhere((element) => element.title == item.title);
   }
 
 }
