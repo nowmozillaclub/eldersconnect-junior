@@ -14,7 +14,7 @@ final TimetableItem item;
   Random random = new Random();
   TimeTableTile({this.item});
   var text = '';
-  var days = {'1':'Monday', '2':'Tuesday', '3':"Wednesday", '4':'Thur', '5':'Fri', '6':'Sat', '7':'Sun'};
+  var days = {'1':'Mon', '2':'Tue', '3':"Wed", '4':'Thu', '5':'Fri', '6':'Sat', '7':'Sun'};
 
   @override
   Widget build(BuildContext context) {
