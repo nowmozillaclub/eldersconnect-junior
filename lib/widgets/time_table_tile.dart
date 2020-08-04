@@ -7,9 +7,6 @@ import '../models/time_table_item.dart';
 import 'package:provider/provider.dart';
 
 class TimeTableTile extends StatelessWidget {
-//  final String time;
-//  final String task;
-//  final List<dynamic> day;
 final TimetableItem item;
   Random random = new Random();
   TimeTableTile({this.item});
@@ -20,7 +17,7 @@ final TimetableItem item;
   Widget build(BuildContext context) {
     final timetableprovider= Provider.of<TimeTableProvider>(context);
     print("ekdoteenchaar");
-    Color color=Color.fromRGBO(random.nextInt(200), random.nextInt(200), random.nextInt(200), 1);
+    Color color=Color.fromRGBO(random.nextInt(220), random.nextInt(220), random.nextInt(200), 1);
     print(item.days);
    return Dismissible(
      onDismissed: (dir) {
@@ -35,7 +32,7 @@ final TimetableItem item;
        padding: EdgeInsets.only(right: 10),
      ),
      child: Card(
-       color: Colors.black,
+       color: Colors.black38,
        shape: RoundedRectangleBorder(side: BorderSide(color: color, width: 2,), borderRadius: BorderRadius.all(Radius.circular(15))),
        shadowColor: color,
        elevation: 35,
@@ -54,20 +51,12 @@ final TimetableItem item;
                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                crossAxisAlignment: CrossAxisAlignment.start,
                children: <Widget>[
-                 Text(item.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                 Text(item.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: color),),
                  Padding(
                    padding: EdgeInsets.symmetric(vertical: 5),
-                   child:
-                       Builder(
-                         builder: (context) {
-                           print("Here it comes onetwo");
-                           print(item.days);
-                           item.days.forEach((element) => text+=days[element] + ', ');
-                           print("Here it comes");
-                           print(text);
-                           return Text(text, overflow: TextOverflow.ellipsis,);
-                         },
-                       ),
+                   child: Row(
+                     children: item.days.map((e) => Text("${e} ,")).toList(),
+                   ),
                    ),
                ],
              ),
