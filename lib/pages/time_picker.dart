@@ -83,7 +83,7 @@ class _TimePickerState extends State<TimePicker> {
                   elevation: 3.0,
                   fillColor: Color.fromRGBO(100, 220, 180, 0.2),
                   child: FittedBox(
-                    child: Text("${daysOfWeek[index]}"),
+                    child: tapped?Text("${daysOfWeek[index]}",style: TextStyle(color: Colors.purple),): Text("${daysOfWeek[index]}"),
                   ),
                   padding: EdgeInsets.all(15.0),
                   shape: CircleBorder(),

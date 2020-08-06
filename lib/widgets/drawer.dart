@@ -19,49 +19,51 @@ class MainDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Hero(
-              tag: 'icon',
-              child: Container(
-                height: 200.0,
-                width: 200.0,
-                child: Image.asset('assets/icon/icon-legacy.png'),
+    return SafeArea(
+      child: Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Hero(
+                tag: 'icon',
+                child: Container(
+                  height: 200.0,
+                  width: 200.0,
+                  child: Image.asset('assets/icon/icon-legacy.png'),
+                ),
               ),
-            ),
-            Text('EldersConnect Junior'),
-            SizedBox(
-              height: 20.0,
-            ),
-            _buildDrawerMenu(
-              'Home',
-              Icon(
-                Icons.home,
+              Text('EldersConnect Junior'),
+              SizedBox(
+                height: 20.0,
               ),
-                  () {
-                    Navigator.of(context).pushReplacementNamed(HomePage.routeName);
-                  },
-            ),
-            _buildDrawerMenu(
-              'View Timetable',
-              Icon(
-                Icons.calendar_today,
+              _buildDrawerMenu(
+                'Home',
+                Icon(
+                  Icons.home,
+                ),
+                    () {
+                      Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+                    },
               ),
-              () {
-                Navigator.of(context).pushNamed(TimeTableView.routeName);
-              },
-            ),
+              _buildDrawerMenu(
+                'View Timetable',
+                Icon(
+                  Icons.calendar_today,
+                ),
+                () {
+                  Navigator.of(context).pushNamed(TimeTableView.routeName);
+                },
+              ),
 
-            _buildDrawerMenu(
-              'Option 3',
-              Icon(
-                Icons.phone_android,
+              _buildDrawerMenu(
+                'Option 3',
+                Icon(
+                  Icons.phone_android,
+                ),
+                () {},
               ),
-              () {},
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

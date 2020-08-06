@@ -62,8 +62,7 @@ class HomePage extends StatelessWidget {
     UserProvider authenticationProvider = Provider.of<UserProvider>(context);
     User _mainUser = authenticationProvider.user;
 
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         drawer: MainDrawer(),
         appBar: AppBar(
           title: Text('EldersConnect Junior'),
@@ -152,7 +151,6 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
         ),
-      ),
     );
   }
 }

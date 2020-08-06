@@ -212,6 +212,8 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - analog_clock (0.0.1):
+    - Flutter
   - AppAuth (1.4.0):
     - AppAuth/Core (= 1.4.0)
     - AppAuth/ExternalUserAgent (= 1.4.0)
@@ -381,6 +383,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - analog_clock (from `.symlinks/plugins/analog_clock/ios`)
   - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_firestore_web (from `.symlinks/plugins/cloud_firestore_web/ios`)
@@ -423,6 +426,8 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  analog_clock:
+    :path: ".symlinks/plugins/analog_clock/ios"
   barcode_scan:
     :path: ".symlinks/plugins/barcode_scan/ios"
   cloud_firestore:
@@ -452,10 +457,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
+  analog_clock: 3f864a82c3b9ffc5743911e353d11556bdb43f7a
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
-  cloud_firestore: 4cc700e236ebfe2d5d980e49cb066d202cfee0e9
+  cloud_firestore: 2a4f8f802fb0b701cf809b283b6bec7477ebaa6f
   cloud_firestore_web: 9ec3dc7f5f98de5129339802d491c1204462bfec
   Firebase: fc4cbf6f1592636431821ef9a3c557e4dfd9f268
   firebase_auth: 4ee3a54d3f09434c508c284a62f895a741a30637
