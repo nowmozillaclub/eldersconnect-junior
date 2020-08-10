@@ -11,15 +11,15 @@ class TimeTableProvider with ChangeNotifier {
   final Function setupUser;
   final Function updateTimetableId;
 
-  TimeTableProvider(this._mainUser, this._senior, this.setupUser, this.updateTimetableId) {
+  TimeTableProvider(
+      this._mainUser, this._senior, this.setupUser, this.updateTimetableId) {
     getTimeTable();
   }
 
-  Future<void> getTimeTable() async{
-    if(_mainUser == null && _senior == null){
+  Future<void> getTimeTable() async {
+    if (_mainUser == null && _senior == null) {
       return;
-    }
-  else if(_mainUser.timetableId != null && _senior.timetableId!=null){
+    } else if (_mainUser.timetableId != null && _senior.timetableId != null) {
       final DocumentSnapshot timeTableDocSnap = await this
           ._firestore
           .collection("timetable")
@@ -45,7 +45,6 @@ class TimeTableProvider with ChangeNotifier {
       if (_mainUser.timetableId == null && _senior.timetableId == null) {
         List<TimetableItem> timetableList = [];
         timetableList.add(timetableItem);
-
         DocumentReference timetableDocRef =
             await _firestore.collection('timetable').add({
           "juniorId": _mainUser.uid,
@@ -81,18 +80,26 @@ class TimeTableProvider with ChangeNotifier {
 
         setupUser();
       }
+      await _firestore.collection('timetable').document(_mainUser.timetableId).updateData({
+        "timestamp": '${DateTime.now().hour}:${DateTime.now().minute}',
+      });
     } catch (error) {
       print(error);
     }
   }
 
   void deleteTimeTabelItem(TimetableItem item) async {
-    DocumentSnapshot doc = await _firestore.collection('timetable').document(_mainUser.timetableId).get();
+    DocumentSnapshot doc = await _firestore
+        .collection('timetable')
+        .document(_mainUser.timetableId)
+        .get();
     List<dynamic> currTimetable = doc.data['timetable'];
     currTimetable.removeWhere((element) => element['title'] == item.title);
     print(currTimetable.length);
-    await _firestore.collection('timetable').document(_mainUser.timetableId).updateData({'timetable': currTimetable});
+    await _firestore
+        .collection('timetable')
+        .document(_mainUser.timetableId)
+        .updateData({'timetable': currTimetable});
     _timetableList.removeWhere((element) => element.title == item.title);
   }
-
 }

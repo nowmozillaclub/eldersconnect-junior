@@ -20,7 +20,7 @@ class _TimePickerState extends State<TimePicker> {
   String task = '';
   List<String> days = [];
   Map<String, dynamic> timetables = {};
-  bool tapped = false;
+  List<bool> tapped = List.filled(7, false);
   final taskController = TextEditingController();
 
   Future<Null> selectTime(BuildContext context) async {
@@ -77,13 +77,13 @@ class _TimePickerState extends State<TimePicker> {
                   onPressed: () {
                     onTapOfCheckBox(index);
                     setState(() {
-                      tapped = !tapped;
+                      tapped[index] = !tapped[index];
                     });
                   },
                   elevation: 3.0,
                   fillColor: Color.fromRGBO(100, 220, 180, 0.2),
                   child: FittedBox(
-                    child: tapped?Text("${daysOfWeek[index]}",style: TextStyle(color: Colors.purple),): Text("${daysOfWeek[index]}"),
+                    child: tapped[index]? Text("${daysOfWeek[index]}",style: TextStyle(color: Colors.amber),): Text("${daysOfWeek[index]}"),
                   ),
                   padding: EdgeInsets.all(15.0),
                   shape: CircleBorder(),
@@ -172,7 +172,7 @@ class _TimePickerState extends State<TimePicker> {
                     TimetableItem timetableitem = TimetableItem(
                         title: task,
                         days: days,
-                        time: _pickedTime.format(context).toString());
+                        time: _pickedTime.format(context));
                     timetableProvider.addTimetable(timetableitem);
                     FocusScope.of(context).unfocus();
                     Navigator.of(context).pop();
