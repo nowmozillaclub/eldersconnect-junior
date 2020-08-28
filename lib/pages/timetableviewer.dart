@@ -20,7 +20,8 @@ class _TimeTableViewState extends State<TimeTableView> {
     final currentuid = userProvider.user.timetableId;
     DocumentSnapshot docSnap =
         await _firestore.collection('timetable').document(currentuid).get();
-    print(docSnap.data['timetable']);
+    print(docSnap.data['juniorId']);
+    print("jel");
     return docSnap;
   }
 

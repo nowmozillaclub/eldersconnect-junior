@@ -49,38 +49,51 @@ class TimeTableProvider with ChangeNotifier {
             await _firestore.collection('timetable').add({
           "juniorId": _mainUser.uid,
           "seniorId": _senior.uid,
-          "timetable": [
-            {
-              'days': timetableItem.days,
-              'title': timetableItem.title,
-              'time': timetableItem.time
-            }
-          ],
+//          "timetable": [
+//            {
+//              'days': timetableItem.days,
+//              'title': timetableItem.title,
+//              'time': timetableItem.time
+//            }
+//          ],
+        });
+        DocumentReference timetableRef =
+            await timetableDocRef.collection('timetable').add({
+          'days': timetableItem.days,
+          'title': timetableItem.title,
+          'time': timetableItem.time,
         });
         await updateTimetableId(timetableDocRef.documentID);
       } else {
-        DocumentSnapshot currentTimetableDoc = await _firestore
+        DocumentReference currentTimetableDoc = await _firestore
             .collection('timetable')
-            .document(_mainUser.timetableId)
-            .get();
-        List<dynamic> currentTimetable = currentTimetableDoc.data['timetable'];
-        currentTimetable.add({
+            .document(_mainUser.timetableId).collection('timetable')
+            .add({
           'days': timetableItem.days,
           'title': timetableItem.title,
-          'time': timetableItem.time
+          'time': timetableItem.time,
         });
+//        List<dynamic> currentTimetable = currentTimetableDoc.data['timetable'];
+//        currentTimetable.add({
+//          'days': timetableItem.days,
+//          'title': timetableItem.title,
+//          'time': timetableItem.time
+//        });
         _timetableList.add(timetableItem);
-        await this
-            ._firestore
-            .collection("timetable")
-            .document(_mainUser.timetableId)
-            .updateData({
-          "timetable": currentTimetable,
-        });
+//        await this
+//            ._firestore
+//            .collection("timetable")
+//            .document(_mainUser.timetableId)
+//            .updateData({
+////          "timetable": currentTimetable,
+//        });
 
         setupUser();
       }
-      await _firestore.collection('timetable').document(_mainUser.timetableId).updateData({
+      await _firestore
+          .collection('timetable')
+          .document(_mainUser.timetableId)
+          .updateData({
         "timestamp": '${DateTime.now().hour}:${DateTime.now().minute}',
       });
     } catch (error) {
