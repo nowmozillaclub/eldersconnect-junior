@@ -7,23 +7,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ec_junior/providers/providers.dart';
 
-class TimePicker extends StatefulWidget {
-  static final String routeName = "/time-picker";
+class TimeTableForm extends StatefulWidget {
+  static final String routeName = "/timeTableForm";
 
   @override
-  _TimePickerState createState() => _TimePickerState();
+  _TimeTableFormState createState() => _TimeTableFormState();
 }
 
-class _TimePickerState extends State<TimePicker> {
+class _TimeTableFormState extends State<TimeTableForm> {
   TimeOfDay _time = TimeOfDay.now();
   TimeOfDay _pickedTime;
   String task = '';
-  List<String> days = [];
+  List<Day> days = [];
   Map<String, dynamic> timetables = {};
   List<bool> tapped = List.filled(7, false);
   final taskController = TextEditingController();
 
-  Future<Null> selectTime(BuildContext context) async {
+  bool isLoading = false;
+
+  Future<void> selectTime(BuildContext context) async {
     _pickedTime = await showTimePicker(context: context, initialTime: _time);
     setState(() {});
   }
@@ -32,7 +34,15 @@ class _TimePickerState extends State<TimePicker> {
     days.add(daysOfWeek[index]);
   }
 
-  List<String> daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  List<Day> daysOfWeek = [
+    Day.Mon,
+    Day.Tue,
+    Day.Wed,
+    Day.Thur,
+    Day.Fri,
+    Day.Sat,
+    Day.Sun
+  ];
 
   void dispose() {
     taskController.dispose();
@@ -83,7 +93,12 @@ class _TimePickerState extends State<TimePicker> {
                   elevation: 3.0,
                   fillColor: Color.fromRGBO(100, 220, 180, 0.2),
                   child: FittedBox(
-                    child: tapped[index]? Text("${daysOfWeek[index]}",style: TextStyle(color: Colors.amber),): Text("${daysOfWeek[index]}"),
+                    child: tapped[index]
+                        ? Text(
+                            daysOfWeek[index].toString().split('.').last,
+                            style: TextStyle(color: Colors.amber),
+                          )
+                        : Text(daysOfWeek[index].toString().split('.').last),
                   ),
                   padding: EdgeInsets.all(15.0),
                   shape: CircleBorder(),
@@ -100,89 +115,112 @@ class _TimePickerState extends State<TimePicker> {
   @override
   Widget build(BuildContext context) {
     final timetableProvider = Provider.of<TimeTableProvider>(context);
-    return SafeArea(
-      child: Scaffold(
-        drawer: MainDrawer(),
-        appBar: AppBar(
-          title: Text('Set Senior Timetable'),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(8),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                AnalogClock(
-                  height: 200,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 2.0, color: Colors.black),
-                      color: Colors.purple.withOpacity(0.4),
-                      shape: BoxShape.circle),
-                  width: 150.0,
-                  isLive: true,
-                  hourHandColor: Colors.white,
-                  minuteHandColor: Colors.white,
-                  showSecondHand: true,
-                  secondHandColor: Colors.red,
-                  numberColor: Colors.amber,
-                  showNumbers: true,
-                  textScaleFactor: 2.0,
-                  showTicks: false,
-                  showDigitalClock: true,
-                  datetime: DateTime.now(),
-                ),
-                timetableInput(),
-                SizedBox(
-                  height: 10.0,
-                ),
-                RaisedButton(
-                  splashColor: Colors.amber,
-                  color: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                    _pickedTime == null
-                        ? "Set Time"
-                        : _pickedTime.format(context).toString(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                    ),
-                  ),
-                  onPressed: () {
-                    selectTime(context);
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                showDayPicker(),
-                InkWell(
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
+    return !isLoading
+        ? SafeArea(
+            child: Scaffold(
+              drawer: MainDrawer(),
+              appBar: AppBar(
+                title: Text('Set Senior Timetable'),
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+              ),
+              body: Padding(
+                padding: EdgeInsets.all(8),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      AnalogClock(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 2.0, color: Colors.black),
+                          color: Colors.purple.withOpacity(0.4),
+                          shape: BoxShape.circle,
+                        ),
+                        width: 150.0,
+                        isLive: true,
+                        hourHandColor: Colors.white,
+                        minuteHandColor: Colors.white,
+                        showSecondHand: true,
+                        secondHandColor: Colors.red,
+                        numberColor: Colors.amber,
+                        showNumbers: true,
+                        textScaleFactor: 2.0,
+                        showTicks: false,
+                        showDigitalClock: true,
+                        datetime: DateTime.now(),
+                      ),
+                      timetableInput(),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      RaisedButton(
+                        splashColor: Colors.amber,
                         color: Colors.purple,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Text("Save"),
-                    alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          _pickedTime == null
+                              ? "Set Time"
+                              : _pickedTime.format(context).toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                          ),
+                        ),
+                        onPressed: () {
+                          selectTime(context);
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      showDayPicker(),
+                      InkWell(
+                        child: Container(
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.purple,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Text("Save"),
+                          alignment: Alignment.center,
+                        ),
+                        onTap: () async {
+                          setState(() {
+                            this.isLoading = true;
+                          });
+
+                          TimetableItem timetableItem = TimetableItem(
+                            title: task,
+                            days: days,
+                            time: _pickedTime.format(context),
+                          );
+                          await timetableProvider.addTimetable(timetableItem);
+
+                          setState(() {
+                            this.isLoading = false;
+                          });
+                          FocusScope.of(context).unfocus();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
                   ),
-                  onTap: () {
-                    TimetableItem timetableitem = TimetableItem(
-                        title: task,
-                        days: days,
-                        time: _pickedTime.format(context));
-                    timetableProvider.addTimetable(timetableitem);
-                    FocusScope.of(context).unfocus();
-                    Navigator.of(context).pop();
-                  },
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          )
+        : Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                ],
+              ),
+            ),
+          );
   }
 }

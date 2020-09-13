@@ -1,5 +1,6 @@
 import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/pages/pages.dart';
+import 'package:ec_junior/providers/providers.dart';
 import 'package:ec_junior/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,9 +37,11 @@ class _SplashPageState extends State<SplashPage> {
       );
     }).then((value) {
       if (value == null) {
-        Navigator.of(context)
-            .pushReplacementNamed(SignInPage.routeName);
+        Navigator.of(context).pushReplacementNamed(SignInPage.routeName);
       } else {
+        Provider.of<TimeTableProvider>(context, listen: false)
+            .fetchTimeTable()
+            .then((value) => print('Time tables fetched'));
         Navigator.of(context).pushReplacementNamed(HomePage.routeName);
       }
     });

@@ -67,7 +67,7 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           title: Text('EldersConnect Junior'),
           actions: [
-            IconButton(icon: Icon(Icons.add), onPressed: ()=> Navigator.pushNamed(context, TimePicker.routeName)),
+            IconButton(icon: Icon(Icons.add), onPressed: ()=> Navigator.pushNamed(context, TimeTableForm.routeName)),
             PopupMenuButton(
               onSelected: (dynamic optionSelected) async {
                 await _handleOptionSelection(context, optionSelected);

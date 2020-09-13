@@ -21,7 +21,7 @@ final TimetableItem item;
     print(item.days);
    return Dismissible(
      onDismissed: (dir) {
-       timetableprovider.deleteTimeTabelItem(item);
+       timetableprovider.deleteTimeTableItem(item);
      },
      direction: DismissDirection.endToStart,
      key: ValueKey(item.title),

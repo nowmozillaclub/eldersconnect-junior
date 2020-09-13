@@ -1,6 +1,6 @@
 import 'package:ec_junior/pages/home_page.dart';
 import 'package:ec_junior/pages/time_picker.dart';
-import 'package:ec_junior/pages/timetableviewer.dart';
+import 'package:ec_junior/pages/timetable_viewer.dart';
 import 'package:ec_junior/providers/providers.dart';
 import 'package:flutter/material.dart';
 

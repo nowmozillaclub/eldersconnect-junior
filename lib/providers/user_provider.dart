@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:ec_junior/models/models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,43 +12,28 @@ class UserProvider with ChangeNotifier {
   User _mainUser;
   User _seniorUser;
 
+  /// Getter for main user.
   User get user => _mainUser;
+
+  /// Getter for senior user.
   User get senior => _seniorUser;
 
+  /// Setup main user and senior user in the memory.
   Future<User> setupUser() async {
+    // Get logged in user and convert it to User object.
     _mainUser =
         await this._convertToUser(await this._firebaseAuth.currentUser());
 
-    if(_mainUser.connectedToUid != null) {
-      DocumentSnapshot seniorDocSnap = await this
-          ._firestore
-          .collection('seniors')
-          .document(_mainUser.connectedToUid)
-          .get();
-      try {
-        if (seniorDocSnap.exists) {
-          _seniorUser = new User(
-            uid: seniorDocSnap.data["uid"],
-            name: seniorDocSnap.data["name"],
-            connectedToName: seniorDocSnap.data["connectedToName"],
-            connectedToUid: seniorDocSnap.data["connectedToUid"],
-            email: seniorDocSnap.data['email'],
-            phone: seniorDocSnap.data['phone'],
-            photoUrl: seniorDocSnap.data['photoUrl'],
-            timetableId: seniorDocSnap.data['timetableId'],
-          );
-        }
-      } catch (error){
-        print(error);
-      }
-    } else {
-      _seniorUser = null;
-    }
+    // Fetch the senior user.
+    _seniorUser = await this.seniorDetails;
+
     notifyListeners();
     return _mainUser;
   }
 
-  Future<void> updateTimetableId(String timetableId) async{
+  /// Update timetableId for senior and junior users.
+  Future<void> updateTimetableId(String timetableId) async {
+    // Updating the junior record in cloud firestore.
     await this
         ._firestore
         .collection("juniors")
@@ -59,6 +42,7 @@ class UserProvider with ChangeNotifier {
       "timetableId": timetableId,
     });
 
+    // Updating the senior record in cloud firestore.
     await this
         ._firestore
         .collection("seniors")
@@ -66,45 +50,30 @@ class UserProvider with ChangeNotifier {
         .updateData({
       "timetableId": timetableId,
     });
-     _mainUser= User(
-      photoUrl: _mainUser.photoUrl,
-      phone: _mainUser.phone,
-      email: _mainUser.email,
-      connectedToUid: _mainUser.connectedToUid,
-      connectedToName: _mainUser.connectedToName,
-      name: _mainUser.name,
-      uid: _mainUser.uid,
-      timetableId: timetableId,
-    );
-     _seniorUser= User(
-       photoUrl: _seniorUser.photoUrl,
-       phone: _seniorUser.phone,
-       email: _seniorUser.email,
-       connectedToUid: _seniorUser.connectedToUid,
-       connectedToName: _seniorUser.connectedToName,
-       name: _seniorUser.name,
-       uid: _seniorUser.uid,
-       timetableId: timetableId,
-     );
-     notifyListeners();
+
+    // Update the in-memory reference of both main and senior user.
+    this.setupUser();
+    notifyListeners();
   }
 
+  /// Convert the firebaseUser to the User object.
   Future<User> _convertToUser(FirebaseUser firebaseUser) async {
     if (firebaseUser != null) {
       String id = firebaseUser.uid;
 
+      // Getting the junior record from the cloud firestore.
       final DocumentSnapshot userDocSnap =
           await this._firestore.collection("juniors").document(id).get();
 
       if (userDocSnap.exists) {
         return new User(
-            photoUrl: userDocSnap.data["photoUrl"],
-            phone: userDocSnap.data["phone"],
-            email: userDocSnap.data["email"],
-            connectedToUid: userDocSnap.data["connectedToUid"],
-            connectedToName: userDocSnap.data["connectedToName"],
-            name: userDocSnap.data["name"],
-            uid: userDocSnap.data["uid"],
+          photoUrl: userDocSnap.data["photoUrl"],
+          phone: userDocSnap.data["phone"],
+          email: userDocSnap.data["email"],
+          connectedToUid: userDocSnap.data["connectedToUid"],
+          connectedToName: userDocSnap.data["connectedToName"],
+          name: userDocSnap.data["name"],
+          uid: userDocSnap.data["uid"],
           timetableId: userDocSnap.data["timetableId"],
         );
       } else {
@@ -124,13 +93,19 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  /// Google log in for users using Firebase.
   Future<void> signInWithGoogle() async {
     try {
+      // Get the account trying to sign in using google.
       final GoogleSignInAccount googleSignInAccount =
           await _googleSignIn.signIn();
+
+      // Authenticate the user using google.
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
+      // Use the authenticated credentials
+      // and use them to log them into firestore.
       final AuthCredential authCredential = GoogleAuthProvider.getCredential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken,
@@ -139,8 +114,11 @@ class UserProvider with ChangeNotifier {
       final AuthResult authResult =
           await _firebaseAuth.signInWithCredential(authCredential);
 
+      // Setup main user and senior user.
       await this.setupUser();
 
+      // Update the firestore collection
+      // if user has logged in for the first time.
       await this
           ._firestore
           .collection('juniors')
@@ -148,11 +126,11 @@ class UserProvider with ChangeNotifier {
           .setData(user.toJson());
       notifyListeners();
     } catch (error) {
-      // TODO: Implement Better Error Handling For Providers.
       print('Error: $error');
     }
   }
 
+  /// Sign out the user.
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
@@ -164,19 +142,11 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> isConnectedToSenior() async {
-    User user = this.user;
-
-    if (user.connectedToUid == "" || user.connectedToUid == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
+  /// Get the senior details from the cloud firestore.
   Future<User> get seniorDetails async {
     User juniorUser = this.user;
 
+    // Getting the senior record from firestore.
     DocumentSnapshot seniorDocSnap = await this
         ._firestore
         .collection('seniors')
@@ -184,6 +154,7 @@ class UserProvider with ChangeNotifier {
         .get();
     try {
       if (seniorDocSnap.exists) {
+        // Returning the senior user object.
         return new User(
           uid: seniorDocSnap.data["uid"],
           name: seniorDocSnap.data["name"],
@@ -193,6 +164,8 @@ class UserProvider with ChangeNotifier {
           phone: seniorDocSnap.data['phone'],
           photoUrl: seniorDocSnap.data['photoUrl'],
         );
+      } else {
+        return null;
       }
     } catch (error) {
       print(error);
